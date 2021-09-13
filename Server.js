@@ -2,26 +2,46 @@
 
 import {
   Guild,
-  TextBasedChannel,
-  TextChannel,
-  ThreadChannel
+  GuildChannel,
+  GuildChannelManager,
+  TextChannel
 } from "discord.js";
 import { 職業ランキング } from "./logger/JobRanking"
-import { 殿堂 } from "./logger/HollOfFame"
+import { 殿堂 } from "./logger/HallOfFame"
 import { チャレンジ記録 } from "./logger/ChallengeRecord"
 import { ログ書き込み君 } from "./logger/Logger"
 
-const スレッド名 = {
-  職業ランキング: "職業ランキング",
-};
+/**
+ * 使用するチャンネル名の定義。
+ * 名前被り不可。
+ */
+export const チャンネル名 = Object.freeze({
+  /**
+   * 占有するカテゴリーチャンネルの名前。
+   * 英小文字は大文字として表示される模様。
+   * @type {string}
+   */
+  メインカテゴリー: "/パーティー",
+  ニュース: "/ニュース",
+  フォトコン: "/フォトコン",
+  プレイヤー一覧: "ﾌﾟﾚｲﾔｰ一覧",
+  ギルド一覧: "/ギルド一覧",
+  チャレンジ記録: "/世界記録",
+  プレイヤーランキング: "/ランキング",
+  殿堂: "/伝説のﾌﾟﾚｲﾔｰ",
+  職業ランキング: "/職業ランキング",
+});
 
 /**
  * @typedef {Object} サーバーチャンネル
+ * @property {CategoryChannel} メインカテゴリー
  * @property {TextChannel} ニュース
  * @property {TextChannel} フォトコン
  * @property {TextChannel} プレイヤー一覧
+ * @property {TextChannel} ギルド一覧
  * @property {TextChannel} チャレンジ記録
- * @property {TextChannel} ランキング
+ * @property {TextChannel} プレイヤーランキング
+ * @property {TextChannel} 殿堂
  * @property {TextChannel} 職業ランキング
  */
 
@@ -44,16 +64,63 @@ export class サーバー {
   }
 
   get ニュース() { return this.#ニュース; }
-  get フォトコン() { return this.#フォトコン }
-  get プレイヤー一覧() { return this.#プレイヤー一覧 }
-  get ギルド勢力() { return this.#ギルド勢力 }
+  get フォトコン() { return this.#フォトコン; }
+  get プレイヤー一覧() { return this.#プレイヤー一覧; }
+  get ギルド勢力() { return this.#ギルド勢力; }
   get チャレンジ記録() { return this.#チャレンジ記録; }
-  get プレイヤーランキング() { return this.#プレイヤーランキング }
-  get 殿堂() { return this.#殿堂 }
+  get プレイヤーランキング() { return this.#プレイヤーランキング; }
+  get 殿堂() { return this.#殿堂; }
   get 職業ランキング() { return this.#職業ランキング; }
 
-  static チャンネルを取得または作成する(guild) {
+  /**
+   * 
+   * @param {GuildChannelManager} チャンネルマネージャー
+   * @param {Array<string>} 名前リスト 検索したいテキストチャンネルの名前の配列
+   * @returns {Array<TextChannel>}
+   */
+  static 全テキストチャンネルを取得または作成する(チャンネルマネージャー, 名前リスト) {
+    const
+      名前候補 = new Set(名前リスト),
+      結果 = new Map();
+    const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
+    結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
+    名前候補.delete(チャンネル名.メインカテゴリー);
+    for (const チャンネル of チャンネルマネージャー.cache.values()) {
+      if (!名前候補.has(チャンネル) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
+        continue;
+      }
+      const チャンネルの名前 = チャンネル.name;
+      結果.set(チャンネルの名前, チャンネル);
+      名前候補.delete(チャンネルの名前);
+    }
+    // 見つからなかった場合チャンネルを作成
+    for (const チャンネルの名前 of 名前候補) {
+      結果.set(チャンネルの名前, await チャンネルマネージャー.create(チャンネルの名前, {
+        type: "GUILD_TEXT"
+      }));
+    }
+    return 結果;
+  }
 
+  /**
+   * 
+   * @param {GuildChannelManager} チャンネルマネージャー
+   * @returns 
+   */
+  async static #メインカテゴリーを取得または作成する(チャンネルマネージャー) {
+    return チャンネルマネージャー.cache.find(this.#メインカテゴリーか)
+      ?? (await チャンネルリスト.create(チャンネル名.メインカテゴリー, {
+        type: "GUILD_CATEGORY"
+      }));
+  }
+
+  /**
+   * 
+   * @param {GuildChannel} チャンネル 
+   * @returns {boolean}
+   */
+  static #メインカテゴリーか(チャンネル) {
+    return チャンネル.name === チャンネル名.メインカテゴリー && チャンネル.type === "GUILD_CATEGORY";
   }
 
   #ニュース;

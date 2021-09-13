@@ -1,6 +1,6 @@
 "use strict";
 
-import { http } from "http"
+import http from "http"
 
 http.createServer(function (request, response) {
   response.writeHead(200, { "Content-Type": "text/plain" })
@@ -14,7 +14,7 @@ if (process.env.DISCORD_BOT_TOKEN == undefined) {
 }
 
 //*/
-require('./party.js')
+import('./party.js')
 /*/
 require('./test/calc.js')
 //*/

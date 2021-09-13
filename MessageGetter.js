@@ -1,6 +1,6 @@
 "use strict";
 
-export class Message {
+export class MessageGetter  {
   static newEntry(name, sex, job, hp, mp, at, df, ag) {
     return {
       content: '以下の内容で登録しました\n**※見た目だけ**',
