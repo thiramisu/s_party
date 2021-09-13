@@ -12,7 +12,7 @@ import { 場所 } from "./place/Place.js"
 import {
   サーバー,
   チャンネル名
-} from "./Server"
+} from "./Server.js"
 
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
