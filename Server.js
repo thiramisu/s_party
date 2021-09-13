@@ -107,7 +107,7 @@ export class サーバー {
    * @param {GuildChannelManager} チャンネルマネージャー
    * @returns 
    */
-  async static #メインカテゴリーを取得または作成する(チャンネルマネージャー) {
+  static async #メインカテゴリーを取得または作成する(チャンネルマネージャー) {
     return チャンネルマネージャー.cache.find(this.#メインカテゴリーか)
       ?? (await チャンネルリスト.create(チャンネル名.メインカテゴリー, {
         type: "GUILD_CATEGORY"
