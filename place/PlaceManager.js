@@ -1,9 +1,9 @@
 
-import { キャラクター } from ('./Chalacter')
-import { クエスト } from ('./Quest')
-import { 家 } from ('./Home')
-import { ギルド } from ('./Guild')
-import { エラー } from ('./Error')
+import { キャラクター } from ('./Chalacter.js')
+import { クエスト } from ('./Quest.js')
+import { 家 } from ('./Home.js')
+import { ギルド } from ('./Guild.js')
+import { エラー } from ('./Error.js')
 
 export class 場所マネージャー {
   constructor() {

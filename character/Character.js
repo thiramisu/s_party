@@ -1,6 +1,6 @@
 "use strict";
 
-import { ステータス } from "./Status"
+import { ステータス } from "./Status.js"
 
 export class キャラクター {
   constructor(名前, アイコン, 色 = NPC色, 最終更新日時, 場所別ID) {

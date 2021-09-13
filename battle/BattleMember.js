@@ -1,6 +1,6 @@
 "use strict";
 
-import { キャラクター } from "../character/Character"
+import { キャラクター } from "../character/Character.js"
 
 export class 戦闘メンバー extends キャラクター {
   constructor({

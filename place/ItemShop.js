@@ -1,6 +1,6 @@
 "use strict";
 
-import { 専門店 } from "./Shop"
+import { 専門店 } from "./Shop.js"
 
 export class 道具屋 extends 専門店 {
   constructor() {

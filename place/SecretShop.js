@@ -1,6 +1,6 @@
 "use strict";
 
-import { 交換所 } from "./Shop"
+import { 交換所 } from "./Shop.js"
 
 export class 秘密の店 extends 交換所 {
   constructor() {

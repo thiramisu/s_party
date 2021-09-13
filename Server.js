@@ -6,10 +6,10 @@ import {
   GuildChannelManager,
   TextChannel
 } from "discord.js";
-import { 職業ランキング } from "./logger/JobRanking"
-import { 殿堂 } from "./logger/HallOfFame"
-import { チャレンジ記録 } from "./logger/ChallengeRecord"
-import { ログ書き込み君 } from "./logger/Logger"
+import { 職業ランキング } from "./logger/JobRanking.js"
+import { 殿堂 } from "./logger/HallOfFame.js"
+import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
+import { ログ書き込み君 } from "./logger/Logger.js"
 
 /**
  * 使用するチャンネル名の定義。

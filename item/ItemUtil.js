@@ -1,6 +1,6 @@
 "use strict";
 
-import { 範囲, 連続 } from "../Util"
+import { 範囲, 連続 } from "../Util.js"
 
 export class アイテム範囲 extends 範囲 {
   ランダム取得() {

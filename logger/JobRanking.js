@@ -1,8 +1,8 @@
 "use strict";
 
 import { MessageEmbed } from "discord.js"
-import { ログ書き込み君 } from "./Logger"
-import { 性別 } from "../Symbol"
+import { ログ書き込み君 } from "./Logger.js"
+import { 性別 } from "../Symbol.js"
 
 export class 職業ランキング extends ログ書き込み君 {
   async 職業ランキングを取得() {

@@ -1,6 +1,6 @@
 "use strict";
 
-import { 一般的な場所 } from "./Place"
+import { 一般的な場所 } from "./Place.js"
 
 export class 冒険に出る extends 一般的な場所 {
   constructor() {

@@ -1,6 +1,6 @@
 "use strict";
 
-import { 基底 } from "./Base"
+import { 基底 } from "./Base.js"
 
 export class ギルド extends 基底 {
   削除() {

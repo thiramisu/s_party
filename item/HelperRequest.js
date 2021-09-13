@@ -1,3 +1,5 @@
+"use strict";
+
 class 何でも屋の依頼 extends 陳列可能インターフェース {
   constructor(ID, 名前, 期限, 納品名, 納品数, 報酬名, 魔物依頼, ギルド依頼) {
     super(名前);

@@ -1,9 +1,9 @@
 "use strict";
 
 import { MessageEmbed } from "discord.js"
-import { 戦闘メンバー } from "../battle/BattleMember"
-import { クエスト } from "../battle/Quest"
-import { ログ書き込み君 } from "./Logger"
+import { 戦闘メンバー } from "../battle/BattleMember.js"
+import { クエスト } from "../battle/Quest.js"
+import { ログ書き込み君 } from "./Logger.js"
 
 export class チャレンジ記録 extends ログ書き込み君 {
   /**

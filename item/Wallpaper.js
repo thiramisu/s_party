@@ -1,6 +1,6 @@
 "use strict";
 
-import { 陳列可能インターフェース } from "./ItemInterface"
+import { 陳列可能インターフェース } from "./ItemInterface.js"
 
 export class 壁紙 extends 陳列可能インターフェース {
   constructor(画像, 価値) {

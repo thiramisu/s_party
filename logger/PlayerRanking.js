@@ -1,8 +1,8 @@
 "use strict";
 
 import { MessageEmbed } from "discord.js"
-import { メンバー } from "../character/Character"
-import { ログ書き込み君 } from "./Logger"
+import { メンバー } from "../character/Character.js"
+import { ログ書き込み君 } from "./Logger.js"
 
 export class プレイヤーランキング extends ログ書き込み君 {
   /**
