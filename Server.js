@@ -78,7 +78,7 @@ export class サーバー {
    * @param {Array<string>} 名前リスト 検索したいテキストチャンネルの名前の配列
    * @returns {Array<TextChannel>}
    */
-  static 全テキストチャンネルを取得または作成する(チャンネルマネージャー, 名前リスト) {
+  static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー, 名前リスト) {
     const
       名前候補 = new Set(名前リスト),
       結果 = new Map();

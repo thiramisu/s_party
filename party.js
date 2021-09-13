@@ -27,7 +27,7 @@ const onceReady = async () => {
   console.log('start');
   for (const guild of (await client.guilds.fetch()).values()) {
     await guild.channels.fetch();
-    new サーバー(guild, サーバー.全テキストチャンネルを取得または作成する(guild.channels, チャンネル名.values()));
+    new サーバー(guild, await サーバー.全テキストチャンネルを取得または作成する(guild.channels, チャンネル名.values()));
   }
   const
     guild = client.guilds.cache.get(process.env.GUILD_ID),
