@@ -7,8 +7,8 @@ import {
   Client,
   Permissions,
 } from "discord.js"
-import { GuildCommandManager } from "./CommandManager"
-import { 場所 } from "./place/Place"
+import { GuildCommandManager } from "./CommandManager.js"
+import { 場所 } from "./place/Place.js"
 import {
   サーバー,
   チャンネル名
