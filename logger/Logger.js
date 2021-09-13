@@ -1,6 +1,11 @@
 "use strict";
 
-import { MessageEmbed, TextBasedChannels, ColorResolvable } from "discord.js"
+import { MessageEmbed } from "discord.js"
+
+/**
+ * @typedef {import("discord.js").ColorResolvable} ColorResolvable
+ * @typedef {import("discord.js").TextBasedChannels} TextBasedChannels
+ */
 
 /**
  * discord の API で1メッセージあたりに含められるEmbedの最大数

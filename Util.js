@@ -1,6 +1,9 @@
 "use strict";
 
-import { ThreadChannel, ThreadManager } from "discord.js";
+/**
+ * @typedef {import("discord.js").ThreadChannel} ThreadChannel
+ * @typedef {import("discord.js").ThreadManager} ThreadManager
+ */
 
 export const
   // "最大"-1が実際の最大なので注意(配列中のランダムな要素の取得に便利なので)
