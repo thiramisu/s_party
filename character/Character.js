@@ -75,7 +75,7 @@ export class キャラクター {
   }
 }
 
-class ログインメンバー extends キャラクター {
+export class ログインメンバー extends キャラクター {
   constructor(情報) {
     super(情報._名前, 情報._色, 情報._アイコン, 情報._最終更新日時);
     this._めっせーじ = 情報._めっせーじ;
@@ -90,7 +90,7 @@ class ログインメンバー extends キャラクター {
   }
 }
 
-class メンバー extends ログインメンバー {
+export class メンバー extends ログインメンバー {
   constructor(情報) {
     super(情報);
     for (const [状態名, 状態] of Object.entries(情報)) {
