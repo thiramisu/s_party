@@ -1,7 +1,7 @@
 {
   "name": "s_party",
   "version": "1.0.0",
-  "description": "",
+  "description": "/party",
   "main": "./index.js",
   "type": "module",
   "scripts": {
@@ -13,10 +13,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "node": "^16.9.1",
+    "npm": "^7.23.0",
     "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
     "discord.js": "^13.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiramisu/s_party.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thiramisu/s_party/issues"
+  },
+  "homepage": "https://github.com/thiramisu/s_party#readme"
 }
