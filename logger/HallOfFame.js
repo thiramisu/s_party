@@ -34,15 +34,19 @@ export class 殿堂 {
     this.#スレッドリスト = new Map();
   }
 
-  async get 職業() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.職業); }
-  async get 魔物() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.魔物); }
-  async get 武器() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.武器); }
-  async get 防具() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.防具); }
-  async get 道具() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.道具); }
-  async get 錬金() { if (this.#スレッドリスト === undefined) { this.#fetch(); } return this.#スレッドリスト.get(スレッド名.錬金); }
+  /**
+   * 
+   * @param {string} 名前 スレッド名
+   */
+  async スレッドを取得(名前) {
+    if (this.#スレッドリスト === undefined) {
+      await this.#fetch();
+    }
+    return this.#スレッドリスト.get(名前);
+  }
 
   /**
-   * スレッドをオンラインで取得
+   * スレッドをオンラインから取得
    */
   async #fetch() {
     全名前からスレッドを取得または作成(await this.#チャンネル.threads.fetch(), スレッド名.values()).forEach(this.#スレッドリストに追加, this);
