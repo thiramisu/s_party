@@ -7,7 +7,7 @@ import {
 } from "discord.js"
 import { ログ書き込み君 } from "./Logger.js"
 import { メンバー } from "../character/Character.js"
-import { 全名前からスレッドを取得または作成 } from "../Util"
+import { 全名前からスレッドを取得または作成 } from "../Util.js"
 
 /**
  * @type {Object}
