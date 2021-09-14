@@ -27,7 +27,7 @@ export class ServerManager {
     // await _サーバー.channels.fetch();
     const
       チャンネルリスト = await サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels),
-      新サーバー = new サーバー();
+      新サーバー = new サーバー(チャンネルリスト);
     サーバーリスト.add(id, 新サーバー);
     return 新サーバー;
   }
