@@ -100,7 +100,8 @@ export class サーバー {
     // 見つからなかった場合チャンネルを作成
     for (const チャンネルの名前 of 名前候補) {
       結果.set(チャンネルの名前, await チャンネルマネージャー.create(チャンネルの名前, {
-        type: "GUILD_TEXT"
+        type: "GUILD_TEXT",
+        parent: メインカテゴリー
       }));
     }
     console.log(結果);
