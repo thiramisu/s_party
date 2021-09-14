@@ -68,7 +68,7 @@ export class サーバー {
     this.#ギルド勢力 = 0; // TODO
     this.#チャレンジ記録 = new チャレンジ記録(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.チャレンジ記録)));
     this.#プレイヤーランキング = 0;  // TODO
-    this.#殿堂 = new 殿堂(サーバーチャンネル.get(チャンネル名.殿堂));
+    this.#殿堂 = new 殿堂(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.殿堂)));
     this.#職業ランキング = new 職業ランキング(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
   }
 

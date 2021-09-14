@@ -26,10 +26,9 @@ export class 殿堂 extends 記録スレッドマネージャー{
   /**
    * 
    * @param {TextChannel} チャンネル 
-   * @param {Enumerator<string>} スレッド名リスト 
    */
-  constructor(チャンネル, スレッド名リスト) {
-    super(チャンネル, スレッド名リスト, 殿堂スレッド);
+  constructor(チャンネル) {
+    super(チャンネル, Object.values(殿堂の名前), 殿堂スレッド);
   }
 }
 

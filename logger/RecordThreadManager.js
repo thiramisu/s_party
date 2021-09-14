@@ -19,7 +19,7 @@ export class 記録スレッドマネージャー {
   /**
    * 
    * @param {TextChannel} チャンネル 
-   * @param {Enumerator<string>} スレッド名リスト
+   * @param {Iterable<string>} スレッド名リスト
    * @param {import("discord.js").Constructable<T>} ログ書き込み君継承クラス
    */
   constructor(チャンネル, スレッド名リスト, ログ書き込み君継承クラス) {
@@ -49,7 +49,7 @@ export class 記録スレッドマネージャー {
       /**
        * @type {Set<string>}
        */
-      名前候補 = new Set(Object.values(this.#スレッド名リスト));
+      名前候補 = new Set(this.#スレッド名リスト);
     for (const スレッド of スレッドマネージャー.cache.values()) {
       const スレッド名 = スレッド.name;
       if (!名前候補.has(スレッド名)) {

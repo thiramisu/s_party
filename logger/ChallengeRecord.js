@@ -9,7 +9,7 @@ import { ログ書き込み君 } from "./Logger.js"
 /**
  * @typedef {import("../battle/Quest.js").クエスト} クエスト
  */
-export class プレイヤーランキング extends ログ書き込み君 {
+export class チャレンジ記録 extends ログ書き込み君 {
   /**
    * 
    * @param {Array<メンバー>} 戦闘メンバーリスト 
