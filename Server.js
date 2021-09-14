@@ -92,7 +92,7 @@ export class サーバー {
     console.log(チャンネルマネージャー.cache.values());
     for (const チャンネル of チャンネルマネージャー.cache.values()) {
       const チャンネルの名前 = チャンネル.name;
-      console.log(`${チャンネルの名前} && ${チャンネル.parent !== メインカテゴリー} && ${チャンネル.type}`);
+      console.log(`${名前候補.has(チャンネルの名前)} && ${チャンネル.parent === メインカテゴリー} && ${チャンネル.type}`);
       if (!名前候補.has(チャンネルの名前) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
         continue;
       }
