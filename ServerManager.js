@@ -26,8 +26,9 @@ export class ServerManager {
     // discord.jsのcacheの仕様が不明
     // await _サーバー.channels.fetch();
     const
-      チャンネルリスト = await サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels),
-      新サーバー = new サーバー(チャンネルリスト);
+      チャンネルリスト = await サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels);
+    console.log(チャンネルリスト.size);
+    const  新サーバー = new サーバー(チャンネルリスト);
     サーバーリスト.add(id, 新サーバー);
     return 新サーバー;
   }

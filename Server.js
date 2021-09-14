@@ -17,7 +17,7 @@ import { ログ書き込み君 } from "./logger/Logger.js"
 /**
  * 使用するチャンネル名の定義。
  * 名前被り不可。
- * テキストチャンネル名は 半角記号・半角英大文字 が使用不可で100文字以内っぽい
+ * テキストチャンネル名は、半角記号・半角英大文字が使用不可で100文字以内っぽい
  * (大文字は小文字に変換されるが表示上は小文字も大文字になる)
  * @readonly
  * @enum {string}
@@ -32,7 +32,7 @@ export const チャンネル名 = Object.freeze({
   ニュース: "ニュース",
   フォトコン: "フォトコン",
   プレイヤー一覧: "ﾌﾟﾚｲﾔｰ一覧",
-  ギルド一覧: "ギルド一覧",
+  ギルド一覧: "ギルド勢力",
   チャレンジ記録: "世界記録",
   プレイヤーランキング: "ランキング",
   殿堂: "伝説のﾌﾟﾚｲﾔｰ",
@@ -83,11 +83,14 @@ export class サーバー {
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @returns {Promise<Array<TextChannel>>}
+   * @returns {Promise<Map<チャンネル名, TextChannel>>}
    */
   static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー) {
     const
       名前候補 = new Set(Object.values(チャンネル名)),
+      /**
+       * @type {Map<チャンネル名, TextChannel>}
+       */
       結果 = new Map();
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
@@ -109,6 +112,7 @@ export class サーバー {
         parent: メインカテゴリー
       }));
     }
+    console.log(結果.keys());
     return 結果;
   }
 
