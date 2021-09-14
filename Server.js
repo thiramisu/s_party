@@ -95,7 +95,6 @@ export class サーバー {
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
     名前候補.delete(チャンネル名.メインカテゴリー);
-    console.log(チャンネルマネージャー.cache.values());
     for (const チャンネル of チャンネルマネージャー.cache.values()) {
       const チャンネルの名前 = チャンネル.name;
       console.log(`${名前候補.has(チャンネルの名前)} && ${チャンネル.parent === メインカテゴリー} && ${チャンネル.type}`);
@@ -112,7 +111,6 @@ export class サーバー {
         parent: メインカテゴリー
       }));
     }
-    console.log(結果.keys());
     return 結果;
   }
 
