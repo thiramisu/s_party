@@ -8,6 +8,7 @@ import {
   Permissions,
 } from "discord.js"
 import { GuildCommandManager } from "./CommandManager.js"
+import { ServerManager } from "./ServerManager.js";
 import { 場所 } from "./place/Place.js"
 import {
   サーバー,
@@ -17,6 +18,7 @@ import {
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
 })
+const serverManager = new ServerManager();
 const guildCommandManagers = new Map();
 
 client.on('guildCreate', async guild => {
@@ -25,15 +27,11 @@ client.on('guildCreate', async guild => {
 
 const onceReady = async () => {
   console.log('start');
-  for (const guild of (await client.guilds.fetch()).values()) {
-    await guild.channels.fetch();
-    new サーバー(guild, await サーバー.全テキストチャンネルを取得または作成する(guild.channels, チャンネル名.values()));
-  }
   const
     guild = client.guilds.cache.get(process.env.GUILD_ID),
     guildCommandManager = new GuildCommandManager(guild);
   guildCommandManager.registerCommand();
-  await guildCommandManagers.set(guild.id, guildCommandManager);
+  guildCommandManagers.set(guild.id, guildCommandManager);
   console.log('ready');
 }
 
@@ -41,6 +39,7 @@ client.once('ready', onceReady)
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
+    serverManager.取得(interaction.guild);
     guildCommandManagers.get(interaction.guildId).onInteraction(interaction);
     return;
   }

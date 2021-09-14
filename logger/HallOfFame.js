@@ -10,7 +10,8 @@ import { メンバー } from "../character/Character.js"
 import { 全名前からスレッドを取得または作成 } from "../Util.js"
 
 /**
- * @type {Object}
+ * @readonly
+ * @enum {string}
  */
 const スレッド名 = {
   職業: "ジョブマスター",

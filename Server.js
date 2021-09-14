@@ -1,25 +1,28 @@
 "use strict";
 
-import {
-  Guild,
-  GuildChannel,
-  GuildChannelManager,
-  TextChannel
-} from "discord.js";
+import { Guild } from "discord.js";
 import { 職業ランキング } from "./logger/JobRanking.js"
 import { 殿堂 } from "./logger/HallOfFame.js"
 import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
 import { ログ書き込み君 } from "./logger/Logger.js"
 
 /**
+ * @typedef {import("discord.js").GuildChannel} GuildChannel
+ * @typedef {import("discord.js").GuildChannelManager} GuildChannelManager
+ * @typedef {import("discord.js").Snowflake} Snowflake
+ * @typedef {import("discord.js").TextChannel} TextChannel
+ */
+
+/**
  * 使用するチャンネル名の定義。
  * 名前被り不可。
+ * @readonly
+ * @enum {string}
  */
 export const チャンネル名 = Object.freeze({
   /**
    * 占有するカテゴリーチャンネルの名前。
    * 英小文字は大文字として表示される模様。
-   * @type {string}
    */
   メインカテゴリー: "/パーティー",
   ニュース: "/ニュース",
@@ -53,6 +56,7 @@ export class サーバー {
    */
   constructor(guild, サーバーチャンネル) {
     this.guild = guild;
+
     this.#ニュース = new ログ書き込み君(サーバーチャンネル.ニュース);
     this.#フォトコン = 0; // TODO
     this.#プレイヤー一覧 = 0; // TODO
@@ -123,6 +127,7 @@ export class サーバー {
     return チャンネル.name === チャンネル名.メインカテゴリー && チャンネル.type === "GUILD_CATEGORY";
   }
 
+  #コマンドマネージャー;
   #ニュース;
   #フォトコン;
   #プレイヤー一覧;
@@ -131,5 +136,4 @@ export class サーバー {
   #プレイヤーランキング;
   #殿堂;
   #職業ランキング;
-
 }
