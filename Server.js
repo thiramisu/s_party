@@ -79,12 +79,11 @@ export class サーバー {
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @param {Array<string>} 名前リスト 検索したいテキストチャンネルの名前の配列
    * @returns {Array<TextChannel>}
    */
-  static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー, 名前リスト) {
+  static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー) {
     const
-      名前候補 = new Set(名前リスト),
+      名前候補 = new Set(チャンネル名.values()),
       結果 = new Map();
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);

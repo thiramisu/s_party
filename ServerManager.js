@@ -23,8 +23,11 @@ export class ServerManager {
     if (サーバーリスト.has(id)) {
       return サーバーリスト.get(id);
     }
-    await _サーバー.channels.fetch();
-    const 新サーバー = new サーバー(サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels, チャンネル名.values()));
+    // discord.jsのcacheの仕様が不明
+    // await _サーバー.channels.fetch();
+    const
+      チャンネルリスト = await サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels),
+      新サーバー = new サーバー();
     サーバーリスト.add(id, 新サーバー);
     return 新サーバー;
   }
