@@ -90,10 +90,10 @@ export class サーバー {
     名前候補.delete(チャンネル名.メインカテゴリー);
     console.log(チャンネルマネージャー.cache.values());
     for (const チャンネル of チャンネルマネージャー.cache.values()) {
-      if (!名前候補.has(チャンネル) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
+      const チャンネルの名前 = チャンネル.name;
+      if (!名前候補.has(チャンネルの名前) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
         continue;
       }
-      const チャンネルの名前 = チャンネル.name;
       結果.set(チャンネルの名前, チャンネル);
       名前候補.delete(チャンネルの名前);
     }
@@ -103,6 +103,7 @@ export class サーバー {
         type: "GUILD_TEXT"
       }));
     }
+    console.log(結果);
     return 結果;
   }
 
