@@ -2,10 +2,11 @@
 "use strict";
 
 import { 基底 } from "./Base.js"
+import { 色名 } from "./config.js"
 
 export class ギルド extends 基底 {
   削除() {
-    this.サーバー.ニュース.書き込み(`< span class="die" > ${this.#名前} ギルドが解散しました</ > `);
+    this.サーバー.ニュース.書き込む(`${this.#名前} ギルドが解散しました`, 色名.死亡);
   }
 
   メンバー削除(メンバー) {

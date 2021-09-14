@@ -22,7 +22,7 @@ export const 殿堂の名前 = {
   錬金: "アルケミスト"
 };
 
-export class 殿堂 extends 記録スレッドマネージャー{
+export class 殿堂 extends 記録スレッドマネージャー {
   /**
    * 
    * @param {TextChannel} チャンネル 
@@ -48,7 +48,9 @@ class 殿堂スレッド extends ログ書き込み君 {
             value: `0000/00/00`
           }
         ],
-        image: プレイヤー.アイコン
+        image: {
+          url: プレイヤー.アイコン
+        }
       })
     ]);
   }

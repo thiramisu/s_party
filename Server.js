@@ -2,9 +2,12 @@
 "use strict";
 
 import { Guild, ThreadChannel } from "discord.js";
+import { プレイヤーマネージャー } from "./character/PlayerManager.js"
+import { ギルドマネージャー } from "./GuildManager.js"
 import { 職業ランキング } from "./logger/JobRanking.js"
 import { 殿堂 } from "./logger/HallOfFame.js"
 import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
+import { プレイヤー一覧 } from "./logger/PlayerList.js"
 import { ログ書き込み君 } from "./logger/Logger.js"
 
 /**
@@ -60,17 +63,22 @@ export class サーバー {
    * @param {サーバーチャンネル} サーバーチャンネル 
    */
   constructor(guild, サーバーチャンネル) {
-    this.guild = guild;
+    this.#guild = guild;
+    this.#プレイヤーマネージャー = new プレイヤーマネージャー(this);
+    this.#ギルドマネージャー = new ギルドマネージャー(this);
 
-    this.#ニュース = new ログ書き込み君(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.ニュース)));
+    this.#ニュース = new ログ書き込み君(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.ニュース)));
     this.#フォトコン = 0; // TODO
-    this.#プレイヤー一覧 = 0; // TODO
+    this.#プレイヤー一覧 = new プレイヤー一覧(this,  /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.プレイヤー一覧)));
     this.#ギルド勢力 = 0; // TODO
-    this.#チャレンジ記録 = new チャレンジ記録(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.チャレンジ記録)));
+    this.#チャレンジ記録 = new チャレンジ記録(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.チャレンジ記録)));
     this.#プレイヤーランキング = 0;  // TODO
     this.#殿堂 = new 殿堂(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.殿堂)));
-    this.#職業ランキング = new 職業ランキング(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
+    this.#職業ランキング = new 職業ランキング(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
   }
+
+  get プレイヤー() { return this.#プレイヤーマネージャー }
+  get ギルド() { return this.#ギルドマネージャー; }
 
   get ニュース() { return this.#ニュース; }
   get フォトコン() { return this.#フォトコン; }
@@ -135,7 +143,14 @@ export class サーバー {
     return チャンネル.name === チャンネル名.メインカテゴリー && チャンネル.type === "GUILD_CATEGORY";
   }
 
+  /**
+   * @type {import("discord.js").Guild}
+   */
+  #guild;
+  #プレイヤーマネージャー;
+  #ギルドマネージャー;
   #コマンドマネージャー;
+
   #ニュース;
   #フォトコン;
   #プレイヤー一覧;

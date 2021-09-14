@@ -1,6 +1,6 @@
 "use strict";
 
-import { サーバー } from "./Server"
+import { サーバー } from "./Server.js"
 
 export class 基底 {
   /**

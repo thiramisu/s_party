@@ -10,7 +10,6 @@ import {
 } from "discord.js"
 import { GuildCommandManager } from "./CommandManager.js"
 import { ServerManager } from "./ServerManager.js";
-import { 場所 } from "./place/Place.js"
 import { 殿堂の名前 } from "./logger/HallOfFame.js";
 
 const client = new Client({

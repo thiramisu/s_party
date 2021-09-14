@@ -11,12 +11,15 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 // time.
 const TOKEN_PATH = 'token.json';
 
+/*
 // Load client secrets from a local file.
 fs.readFile("./credentials.json", (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content), listMajors);
 });
+*/
+authorize(process.env, listMajors);
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -58,11 +61,14 @@ function getNewToken(oAuth2Client, callback) {
     oAuth2Client.getToken(code, (err, token) => {
       if (err) return console.error('Error while trying to retrieve access token', err);
       oAuth2Client.setCredentials(token);
+      /*
       // Store the token to disk for later program executions
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) return console.error(err);
         console.log('Token stored to', TOKEN_PATH);
       });
+      */
+      console.log(token);
       callback(oAuth2Client);
     });
   });

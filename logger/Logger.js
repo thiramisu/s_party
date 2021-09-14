@@ -2,8 +2,10 @@
 "use strict";
 
 import { MessageEmbed } from "discord.js"
+import { 基底 } from "../Base.js"
 
 /**
+ * @typedef {import("../Server.js").サーバー} サーバー
  * @typedef {import("discord.js").ColorResolvable} ColorResolvable
  * @typedef {import("discord.js").TextBasedChannels} TextBasedChannels
  */
@@ -18,12 +20,14 @@ const MAX_EMBED_COUNT_PER_MESSAGE = 10;
  */
 const DEFAULT_LOG_COLOR = "#FFFFFF";
 
-export class ログ書き込み君 {
+export class ログ書き込み君 extends 基底 {
   /**
    * 
+   * @param {サーバー} サーバー
    * @param {TextBasedChannels} チャンネル 
    */
-  constructor(チャンネル) {
+  constructor(サーバー, チャンネル) {
+    super(サーバー);
     this.#チャンネル = チャンネル;
   }
 

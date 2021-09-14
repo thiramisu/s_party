@@ -1,10 +1,34 @@
 // @ts-check
 "use strict";
 
+import { 基底 } from "../Base.js"
 import { ステータス } from "./Status.js"
+import { 整数乱数 } from "../Util.js"
+import { モンスター倉庫, アイテム倉庫 } from "./Yard.js"
+import { 通貨 } from "../Currency.js"
+import { 家 } from "../place/Home.js"
+import { ログ書き込み君 } from "../logger/Logger.js"
+import { キャラクター装備マネージャー } from "./CharacterEquipmentManager.js"
+import { 色名 } from "../config.js";
+import { プレイヤー錬金レシピマネージャー } from "./PlayerAlchemyRecipeManager.js";
 
-export class キャラクター {
-  constructor(名前, アイコン, 色 = NPC色, 最終更新日時, 場所別ID) {
+/**
+ * @typedef {import("discord.js").ColorResolvable} ColorResolvable
+ * @typedef {import("../Server.js").サーバー} サーバー
+ */
+
+export class キャラクター extends 基底 {
+  /**
+   * 
+   * @param {サーバー} サーバー
+   * @param {string} 名前 
+   * @param {string} アイコン 
+   * @param {ColorResolvable} 色 
+   * @param {*} 最終更新日時 
+   * @param {*} 場所別ID 
+   */
+  constructor(サーバー, 名前, アイコン, 色 = 色名.NPC, 最終更新日時, 場所別ID) {
+    super(サーバー);
     this._名前 = 名前;
     this._アイコン = アイコン;
     this._色 = 色;
@@ -77,8 +101,8 @@ export class キャラクター {
 }
 
 export class ログインメンバー extends キャラクター {
-  constructor(情報) {
-    super(情報._名前, 情報._色, 情報._アイコン, 情報._最終更新日時);
+  constructor(サーバー, 情報) {
+    super(サーバー, 情報._名前, 情報._色, 情報._アイコン, 情報._最終更新日時);
     this._めっせーじ = 情報._めっせーじ;
     this._ギルド名 = 情報._ギルド名;
   }
@@ -92,8 +116,18 @@ export class ログインメンバー extends キャラクター {
 }
 
 export class メンバー extends ログインメンバー {
-  constructor(情報) {
-    super(情報);
+  /**
+   * 
+   * @param {サーバー} サーバー 
+   * @param {*} 情報 
+   */
+  constructor(サーバー, 情報) {
+    super(サーバー, 情報);
+    this.#アイテム倉庫 = new アイテム倉庫(サーバー, this);
+    this.#モンスター倉庫 = new モンスター倉庫(サーバー, this);
+    this.#装備マネージャー = new キャラクター装備マネージャー(サーバー, this);
+    this.#錬金レシピマネージャー = new プレイヤー錬金レシピマネージャー(サーバー, this);
+
     for (const [状態名, 状態] of Object.entries(情報)) {
       switch (状態名) {
         case "_ステータス":
@@ -136,7 +170,7 @@ export class メンバー extends ログインメンバー {
    */
   転職(次職) {
     this.ギルド?.ポイント増加(50);
-    this.軌跡に書き込み(`${this.現職.名前}から${次職.名前}に転職`);
+    this.軌跡.書き込む(`${this.現職.名前}から${次職.名前}に転職`);
     // TODO 全体の傾向に追加
     // TODO ジョブマス確認
     const 消費アイテム名 = 次職.転職条件.消費アイテム名を取得(this);
@@ -168,7 +202,7 @@ export class メンバー extends ログインメンバー {
   }
 
   一気にレベルアップ() {
-    while (可能ならレベルアップ());
+    while (this.可能ならレベルアップ());
   }
 
   現職SP増加(増加量) {
@@ -177,6 +211,11 @@ export class メンバー extends ログインメンバー {
     // TODO: スキル習得ログ
   }
 
+  /**
+   * 
+   * @param {string} アイテム名 
+   * @returns 
+   */
   async アイテムを使う(アイテム名) {
     const _アイテム = アイテム.一覧(アイテム名);
     if (アイテム名 === undefined || _アイテム === undefined || !await this.倉庫に存在する(アイテム名)) {
@@ -188,10 +227,6 @@ export class メンバー extends ログインメンバー {
       }
       this.倉庫から取り除く(アイテム);
     }
-  }
-
-  軌跡に書き込み(内容) {
-    データベース操作.プレイヤー軌跡を追加([内容], this._ID);
   }
 
   プロフィールを更新(保存データ) {
@@ -258,9 +293,9 @@ export class メンバー extends ログインメンバー {
   コンプリート(種別) {
     // TODO 職業・モンスター・錬金ならフラグ立て
     // TODO コレクションはテクニカルな感じで重複処理回避してるので要検討
-    伝説のプレイヤー.登録(new ログインメンバー(this));
-    プレイヤーの軌跡.書き込む(クラス付きテキスト("comp", `${種別} Complete!!`));
-    ニュース.書き込む(クラス付きテキスト("comp", `${種別} ${あなた}が${種別}をコンプリートする！`));
+    this.サーバー.殿堂.種別.登録(new ログインメンバー(this));
+    this.軌跡.書き込む(`${種別} Complete!!`, 色名.コンプリート);
+    this.サーバー.ニュース.書き込む(`${種別} ${this.名前}が${種別}をコンプリートする！`, 色名.コンプリート);
   }
 
   バックアップ() {
@@ -279,16 +314,16 @@ export class メンバー extends ログインメンバー {
     this.#現在地を設定(行き先);
   }
 
-  async ログイン(パスワード, めっせーじ) {
-    if (this.#パスワード確認(パスワード) || this.更新連打確認()) {
+  async ログイン(めっせーじ) {
+    if (this.更新連打確認()) {
       return;
     }
     this._めっせーじ = めっせーじ;
     this._最終更新日時 = 更新日時.取得();
     //TODO this.トップに登録();
-    ギルド.必要なら一覧出力();
+    this.サーバー.ギルド.必要なら一覧出力();
     データベース操作.プレイヤーを保存(this);
-    await メンバー.#必要ならプレイヤー削除と一覧更新();
+    await this.サーバー.プレイヤー.必要ならプレイヤー削除と一覧更新();
   }
 
   ログアウト() {
@@ -299,9 +334,9 @@ export class メンバー extends ログインメンバー {
 
   削除(保存する = true) {
     this._ギルド.メンバー削除(this);
-    メンバー.#一覧.remove(this);
+    this.サーバー.プレイヤー.削除(this);
     if (保存する)
-      メンバー.保存();
+      this.サーバー.プレイヤー.保存();
   }
 
   現職名または前職名(職業名) {
@@ -312,74 +347,14 @@ export class メンバー extends ログインメンバー {
     this._アイコン = this.現職.アイコン名を取得(this._性別);
   }
 
-  装備(アイテム, アイテム図鑑に登録する = true) {
-    let 交換アイテム名;
-    if (アイテム instanceof 武器) {
-      交換アイテム名 = this._武器;
-      this._武器 = アイテム.名前;
-    }
-    else if (アイテム instanceof 防具) {
-      交換アイテム名 = this._防具;
-      this._防具 = アイテム.名前;
-    }
-    else if (アイテム instanceof 道具) {
-      交換アイテム名 = this._道具;
-      this._道具 = アイテム.名前;
-    }
-    else {
-      throw new TypeError(`${アイテム名.名前}は装備できないアイテムです`);
-    }
-    if (アイテム図鑑に登録する) {
-      // TODO
-    }
-    if (交換アイテム名 !== undefined) {
-      // デフォルトに忠実
-      データベース操作.倉庫内のアイテムを入れ替える(this._武器, 交換アイテム名, this._ID);
-      return true;
-    }
-    return false;
-  }
-
-  アイテムに対応する装備スロットが空いている(アイテム) {
-    if (アイテム instanceof 武器) {
-      return this._武器 === undefined;
-    }
-    else if (アイテム instanceof 防具) {
-      return this._防具 === undefined;
-    }
-    else if (アイテム instanceof 道具) {
-      return this._道具 === undefined;
-    }
-    else {
-      throw new TypeError(`${アイテム名}は装備できないアイテムです`);
-    }
-  }
-
   装備または倉庫に送る(アイテム名, アイテム図鑑に登録する = true) {
     this.倉庫にアイテムを送る(アイテム名, this._ID);
     const _アイテム = アイテム.一覧(アイテム名);
-    if (!this.アイテムに対応する装備スロットが空いている(_アイテム)) {
+    if (!this.装備.アイテムに対応するスロットが空いている(_アイテム)) {
       return false;
     }
-    this.装備(_アイテム, アイテム図鑑に登録する);
+    this.装備.装備(_アイテム, アイテム図鑑に登録する);
     return true;
-  }
-
-  装備アイテムを売る(アイテム名, 価格) {
-    if (this._武器 === アイテム名) {
-      this._武器 = undefined;
-    }
-    else if (this._防具 === アイテム名) {
-      this._防具 = undefined;
-    }
-    else if (this._道具 === アイテム名) {
-      this._道具 = undefined;
-    }
-    else {
-      throw new Error("装備中ではないアイテムは売れません");
-    }
-    this.所持金.収支(価格);
-    データベース操作.アイテムを破棄(アイテム名, this._ID);
   }
 
   倉庫にアイテムを送る(アイテム名) {
@@ -400,31 +375,6 @@ export class メンバー extends ログインメンバー {
     this._実績.依頼ポイント増加();
   }
 
-  錬金を始める(レシピ) {
-    this._錬金中レシピ = レシピ;
-  }
-
-  錬金を完成させる() {
-    if (this._錬金中レシピ === undefined) {
-      return;
-    }
-    this._錬金完成済み = true;
-  }
-
-  錬金を受け取る() {
-    if (!this._錬金完成済み) {
-      return undefined;
-    }
-    const レシピ = this._錬金中レシピ;
-    this.倉庫にアイテムを送る(レシピ.完成品名);
-    this._実績.錬金ポイント増加();
-    レシピ.作成済み = true;
-    this.錬金レシピを登録(レシピ);
-    this._錬金中レシピ = undefined;
-    this._錬金完成済み = false;
-    return レシピ;
-  }
-
   ヘッダー用出力() {
     // TODO ステータスは武器防具込みのもの、素早さのみ max(0,素早さ)
     const 断片 = 強調テキスト(
@@ -437,38 +387,6 @@ export class メンバー extends ログインメンバー {
       this.ヘッダー用装備出力()
     );
     return 断片;
-  }
-
-  ヘッダー用装備出力() {
-    const 断片 = document.createDocumentFragment();
-    if (this._武器) {
-      断片.appendChild(document.createTextNode(` E：${this._武器}`));
-    }
-    if (this._防具) {
-      断片.appendChild(document.createTextNode(` E：${this._防具}`));
-    }
-    if (this._道具) {
-      断片.appendChild(document.createTextNode(` E：${this._道具}`));
-    }
-    return 断片;
-  }
-
-  こうどう用装備出力(こうどう名) {
-    const 断片 = document.createDocumentFragment();
-    if (this._武器) {
-      断片.appendChild(アイテム.一覧(this._武器).こうどう用出力(こうどう名));
-    }
-    if (this._防具) {
-      断片.appendChild(アイテム.一覧(this._防具).こうどう用出力(こうどう名));
-    }
-    if (this._道具) {
-      断片.appendChild(アイテム.一覧(this._道具).こうどう用出力(こうどう名));
-    }
-    return 断片;
-  }
-
-  が装備中(アイテム名) {
-    return アイテム名 === this._武器 || アイテム名 === this._防具 || アイテム名 === this._道具;
   }
 
   疲労確認() {
@@ -496,47 +414,11 @@ export class メンバー extends ログインメンバー {
   get ステータス() { return this._ステータス; }
   get レベル() { return this._レベル; }
 
-  static 新規登録(_名前, _パスワード, _職業名, _性別) {
-    // TODO ブラックリスト
-    // throw new Error("あなたのホストからは登録することが禁止されています");
-    if (メンバー.#登録チェック(_名前, _パスワード, _職業名, _性別))
-      return;
-    // TODO 多重登録禁止
-    // throw new Error("多重登録は禁止しています");
-    const
-      _ステータス = new ステータス(
-        整数乱数(32, 30, true),
-        整数乱数(8, 6, true),
-        整数乱数(8, 6, true),
-        整数乱数(8, 6, true),
-        整数乱数(8, 6, true)
-      ),
-      _メンバー = new メンバー({
-        _名前,
-        _パスワード,
-        _現職: {
-          _職業名,
-          _SP: 0
-        },
-        _所持金: {
-          _所持: 200
-        },
-        _色: "#FFFFFF",
-        _性別,
-        _現在地名: "交流広場",
-        _転職回数: 0,
-        _レベル: 1,
-        _アイコン: 転職可能な職業.一覧(_職業名).アイコン名を取得(_性別),
-        _ステータス
-      });
-    セーブデータ.登録者数.増減(1);
-    ニュース.書き込み(`<span class="強調">${_名前}</span> という冒険者が参加しました`);
-    画面.一覧("トップ画面").新規登録完了表示(_名前, _パスワード, _職業名, _性別, _ステータス);
-    //TODO 紹介ID付きなら紹介者に小さなメダル送信
-    // データベース操作.アイテム入手("小さなメダル", ID, "$m{name}(紹介加入)");
-    データベース操作.新規プレイヤー登録(_メンバー, `冒険者 <span class="強調">${_名前}</span> 誕生！`);
-    return _メンバー;
-  }
+  get 軌跡() { return this.#軌跡; }
+  get 装備() { return this.#装備マネージャー; }
+  get アイテム倉庫() { return this.#アイテム倉庫; }
+  get モンスター倉庫() { return this.#モンスター倉庫; }
+  get 錬金レシピ() { return this.#錬金レシピマネージャー; }
 
   static データベースから読み込む(名前, コールバック) {
     データベース操作.プレイヤーを読み込む(名前, コールバック);
@@ -550,6 +432,28 @@ export class メンバー extends ログインメンバー {
   _家のユーザー名;
   _壁紙;
   #現在地;
+
+  /**
+   * @type {アイテム倉庫}
+   */
+  #アイテム倉庫;
+  /**
+   * @type {モンスター倉庫}
+   */
+  #モンスター倉庫;
+  /**
+   * @type { ログ書き込み君 }
+   */
+  #軌跡;
+  /**
+   * @type { プレイヤー錬金レシピマネージャー }
+   */
+  #錬金レシピマネージャー;
+  /**
+   * @type {キャラクター装備マネージャー} 
+   */
+  #装備マネージャー;
+  
   /**
    * @type {ステータス}
    */
@@ -578,18 +482,15 @@ export class メンバー extends ログインメンバー {
   _預かり所が空き;
   _宝を取得済み;
   _飲食済み;
-  _錬金完成済み;
-  _錬金中レシピ;
   _実績;
   _ダンジョンイベント;
-  _錬金レシピ;
   _起床時刻;
 
   #プレイヤー一覧用出力() {
     const
       tr = document.createElement("tr"),
-      項目名リスト = new Set("_性別", "_ギルド", "_レベル", "_転職回数", "_現職", "_前職", "_ステータス", "_所持金", "_カジノコイン", "_小さなメダル", "_武器", "_防具", "_道具", "_実績"),
-      数値 = new Set("_レベル", "_転職回数", "_ステータス", "_実績");
+      項目名リスト = new Set(["_性別", "_ギルド", "_レベル", "_転職回数", "_現職", "_前職", "_ステータス", "_所持金", "_カジノコイン", "_小さなメダル", "_武器", "_防具", "_道具", "_実績"]),
+      数値 = new Set(["_レベル", "_転職回数", "_ステータス", "_実績"]);
     const td = document.createElement("td");
     td.innerHTML = `<a href="../player.cgi?id=$dir_name">${this._名前}</a><img src="../$icondir/${this._アイコン}" />`;
     tr.appendChild(td);
@@ -643,90 +544,4 @@ export class メンバー extends ログインメンバー {
     return true;
   }
 
-  static #必要ならプレイヤー削除と一覧更新() {
-    const 現在日時 = 更新日時.取得();
-    if (セーブデータ.プレイヤー一覧更新日時.取得() + プレイヤー一覧の更新周期日数 * 60 * 60 * 24 > 現在日時)
-      return;
-    const tBody = document.createElement("tbody");
-    実績.ランキング作成開始();
-    /* TODO cursor化
-    for (const _メンバー of メンバー.#一覧) {
-      //_メンバー.データ破損チェック(バックアップがあれば復旧); 破損していなければバックアップへ;
-      if (_メンバー.#自動削除対象なら削除()) {
-        continue;
-      }
-      実績.ランキング判定1(_メンバー);
-      tBody.appendChild(_メンバー.#プレイヤー一覧用出力());
-    }
-    実績.ランキング作成開始2();
-    for (const _メンバー of メンバー.#一覧) {
-      実績.ランキング判定2(_メンバー);
-    }
-    //*/
-    実績.ランキング出力();
-    $id("プレイヤー一覧").appendChild(tBody);
-    セーブデータ.プレイヤー一覧更新日時.保存(現在日時);
-  }
-
-  static #登録チェック(名前, パスワード, 職業名, 性別) {
-    try {
-      if (!名前)
-        throw "プレイヤー名が入力されていません";
-      if (パスワード === 空文字列)
-        throw "パスワードが入力されていません";
-      if (性別 === 空文字列)
-        throw "性別が入力されていません";
-
-      if (メンバー.#プレイヤー名に不正な文字が含まれているか.test(名前))
-        throw "プレイヤー名に不正な文字( ,;\"'&<>@ )が含まれています";
-      if (メンバー.#プレイヤー名にアットマークが含まれているか.test(名前))
-        throw "プレイヤー名に不正な文字( ＠ )が含まれています";
-      if (メンバー.#プレイヤー名に不正な空白が含まれているか.test(名前))
-        throw "プレイヤー名に不正な空白が含まれています";
-      if (全角を2とした文字列長(名前) > 8)
-        throw "プレイヤー名は全角４(半角８)文字以内です";
-
-      if (メンバー.#パスワードに半角英数字以外の文字が含まれているか.test(パスワード))
-        throw "パスワードは半角英数字で入力して下さい";
-      const パスワード長 = パスワード.length;
-      if (パスワード長 < 4 || パスワード長 > 12)
-        throw "パスワードは半角英数字４～12文字です";
-      if (名前 === パスワード)
-        throw "プレイヤー名とパスワードが同一文字列です";
-      if (性別 !== "男" && 性別 !== "女")
-        throw "性別が異常です";
-
-      if (!初期職業.has(職業名))
-        throw "職業が異常です";
-
-
-      if (1 === 0) // TODO
-        throw "その名前はすでに登録されています";
-      if (セーブデータ.登録者数.取得() >= 最大登録人数)
-        throw "現在定員のため、新規登録は受け付けておりません";
-      const 最終ipアドレス = 1;
-      const 現在ipアドレス = 2;
-      if (最終ipアドレス === 現在ipアドレス) // TODO
-        throw "多重登録は禁止しています";
-    }
-    catch (エラー内容) {
-      エラー.表示(エラー内容);
-      return true;
-    }
-    return false;
-  }
-
-  #パスワード確認(パスワード) {
-    if (this._パスワード !== パスワード) {
-      エラー.表示("パスワードが違います");
-      return true;
-    }
-    return false;
-  }
-
-  static #一覧;
-  static #プレイヤー名に不正な文字が含まれているか = Object.freeze(new RegExp(/[,;\"\'&<>\@]/));
-  static #プレイヤー名にアットマークが含まれているか = Object.freeze(new RegExp(/＠/));
-  static #プレイヤー名に不正な空白が含まれているか = Object.freeze(new RegExp(/＠/));
-  static #パスワードに半角英数字以外の文字が含まれているか = Object.freeze(new RegExp(/[^0-9a-zA-Z]/));
 }

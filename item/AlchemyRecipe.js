@@ -1,12 +1,16 @@
 // @ts-check
 "use strict";
 
+import { 陳列可能インターフェース } from "./ItemInterface.js";
+import { ランダムな1要素 } from "../Util.js";
+
+
 export class 錬金レシピ extends 陳列可能インターフェース {
   constructor(素材1, 素材2, 完成品) {
     super();
-    this._素材1 = 素材1;
-    this._素材2 = 素材2;
-    this._完成品 = 完成品;
+    this.#素材1 = 素材1;
+    this.#素材2 = 素材2;
+    this.#完成品 = 完成品;
     this.#習得難易度 = 錬金レシピ.#難易度別の素材1.findIndex((セット) => セット.has(素材1));
     if (this.#習得難易度 === -1) {
       this.#習得難易度 = Infinity;
@@ -15,12 +19,16 @@ export class 錬金レシピ extends 陳列可能インターフェース {
 
   _陳列用出力(完成品を表示する = true) {
     return super._陳列用出力([
-      this._素材1,
-      `×${this._素材2}`,
-      `＝${完成品を表示する ? this._完成品 : "？？？"}`
+      this.素材1,
+      `×${this.素材2}`,
+      `＝${完成品を表示する ? this.#完成品 : "？？？"}`
     ], `＠れんきん>${this.素材1}＠そざい>${this.素材2} `);
   }
 
+  get 素材1() { return this.#素材1; }
+  get 素材2() { return this.#素材2; }
+  get 完成品() { return this.#完成品; }
+  
   static 習得(習得済み錬金レシピ一覧, 難易度 = Infinity) {
     // 原作に忠実な実装
     const 習得レシピ = ランダムな1要素(ランダムな1要素(
@@ -149,7 +157,7 @@ export class 錬金レシピ extends 陳列可能インターフェース {
     ].forEach(錬金レシピ.#一覧作成);
   }
 
-  一覧(素材1, 素材2) {
+  static 一覧(素材1, 素材2) {
     return this.#一覧.get(素材1)?.get(素材2);
   }
 
@@ -166,6 +174,9 @@ export class 錬金レシピ extends 陳列可能インターフェース {
   }
 
   #習得難易度;
+  #素材1;
+  #素材2;
+  #完成品;
 
   static #一覧 = new Map();
   static #難易度別の素材1 = Object.freeze([
@@ -181,39 +192,4 @@ export class 錬金レシピ extends 陳列可能インターフェース {
       "ﾊﾞｽﾀｰﾄﾞｿｰﾄﾞ", "堕天使のﾚｲﾋﾟｱ", "ﾊﾞﾄﾙｱｯｸｽ", "山賊の斧", "銀の胸当て", "みかわしの服", "ｼﾙﾊﾞｰﾒｲﾙ", "賢者のﾛｰﾌﾞ", "毛皮のﾏﾝﾄ", "魔人の鎧"
     ])
   ]);
-}
-
-class ユーザー個別錬金レシピ extends 錬金レシピ {
-  constructor(錬金レシピ, 作成済み) {
-    super(錬金レシピ._素材1, 錬金レシピ._素材2, 錬金レシピ._完成品);
-    this._作成済み = 作成済み;
-  }
-
-  _陳列用出力() {
-    return super._陳列用出力(this._作成済み);
-  }
-
-  get 作成済み() { return this._作成済み; }
-
-  static オブジェクトから({ _素材1, _素材2, _完成品 }) {
-    return new ユーザー個別錬金レシピ(new 錬金レシピ(_素材1, _素材2, _完成品));
-  }
-}
-
-
-export class ユーザー個別錬金レシピ extends 錬金レシピ {
-  constructor(錬金レシピ, 作成済み) {
-    super(錬金レシピ._素材1, 錬金レシピ._素材2, 錬金レシピ._完成品);
-    this._作成済み = 作成済み;
-  }
-
-  _陳列用出力() {
-    return super._陳列用出力(this._作成済み);
-  }
-
-  get 作成済み() { return this._作成済み; }
-
-  static オブジェクトから({ _素材1, _素材2, _完成品 }) {
-    return new ユーザー個別錬金レシピ(new 錬金レシピ(_素材1, _素材2, _完成品));
-  }
 }

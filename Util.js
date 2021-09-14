@@ -57,34 +57,7 @@ export const
     span.classList.add(クラス);
     span.textContent = テキスト;
     return span;
-  },
-  名前からスレッドを取得または作成 =
-    /**
-     * 
-     * @param {ThreadManager} スレッドマネージャー
-     * @param {string} 名前
-     * @param {string} [理由]
-     * @returns {ThreadChannel}
-     */
-    async (スレッドマネージャー, 名前, 理由) => {
-      for (const thread of (await スレッドマネージャー.fetchArchived()).threads.values()) {
-        if (thread.name === 名前) {
-          await thread.setArchived(false);
-          return thread;
-        }
-      }
-      for (const thread of (await スレッドマネージャー.fetch()).threads.values()) {
-        if (thread.name === 名前) {
-          return thread;
-        }
-      }
-      const thread = await スレッドマネージャー.create({
-        name: 名前,
-        autoArchiveDuration: 60,
-        reason: 理由
-      });
-      return thread;
-    }
+  }
   ;
 
 export const
