@@ -7,6 +7,7 @@ import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
 import { ログ書き込み君 } from "./logger/Logger.js"
 
 /**
+ * @typedef {import("discord.js").CategoryChannel} CategoryChannel
  * @typedef {import("discord.js").GuildChannel} GuildChannel
  * @typedef {import("discord.js").GuildChannelManager} GuildChannelManager
  * @typedef {import("discord.js").Snowflake} Snowflake
@@ -57,14 +58,14 @@ export class サーバー {
   constructor(guild, サーバーチャンネル) {
     this.guild = guild;
 
-    this.#ニュース = new ログ書き込み君(サーバーチャンネル.ニュース);
+    this.#ニュース = new ログ書き込み君(サーバーチャンネル.get(チャンネル名.ニュース));
     this.#フォトコン = 0; // TODO
     this.#プレイヤー一覧 = 0; // TODO
     this.#ギルド勢力 = 0; // TODO
-    this.#チャレンジ記録 = new チャレンジ記録(サーバーチャンネル.チャレンジ記録);
+    this.#チャレンジ記録 = new チャレンジ記録(サーバーチャンネル.get(チャンネル名.チャレンジ記録));
     this.#プレイヤーランキング = 0;  // TODO
-    this.#殿堂 = new 殿堂(サーバーチャンネル.殿堂);
-    this.#職業ランキング = new 職業ランキング(サーバーチャンネル.職業ランキング);
+    this.#殿堂 = new 殿堂(サーバーチャンネル.get(チャンネル名.殿堂));
+    this.#職業ランキング = new 職業ランキング(サーバーチャンネル.get(チャンネル名.職業ランキング));
   }
 
   get ニュース() { return this.#ニュース; }
@@ -79,7 +80,7 @@ export class サーバー {
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @returns {Array<TextChannel>}
+   * @returns {Promise<Array<TextChannel>>}
    */
   static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー) {
     const
@@ -104,14 +105,13 @@ export class サーバー {
         parent: メインカテゴリー
       }));
     }
-    console.log(結果);
     return 結果;
   }
 
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @returns 
+   * @returns {Promise<CategoryChannel}
    */
   static async #メインカテゴリーを取得または作成する(チャンネルマネージャー) {
     return チャンネルマネージャー.cache.find(this.#メインカテゴリーか)
