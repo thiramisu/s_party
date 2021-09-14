@@ -9,10 +9,11 @@ http.createServer(function (request, response) {
 })
   .listen(3000);
 
-if (process.env.DISCORD_BOT_TOKEN == undefined) {
+if (process.env.DISCORD_BOT_TOKEN === undefined) {
   console.error("tokenが設定されていません！");
   process.exit(0);
 }
+process.env.HOGE = "humu";
 
 //*/
 import('./party.js')
