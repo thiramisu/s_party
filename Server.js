@@ -83,7 +83,7 @@ export class サーバー {
    */
   static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー) {
     const
-      名前候補 = new Set(チャンネル名.values()),
+      名前候補 = new Set(Object.values(チャンネル名)),
       結果 = new Map();
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
