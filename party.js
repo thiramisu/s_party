@@ -14,6 +14,7 @@ import {
   サーバー,
   チャンネル名
 } from "./Server.js"
+import { 殿堂の名前 } from "./logger/HallOfFame";
 
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
@@ -39,8 +40,14 @@ client.once('ready', onceReady)
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
-    serverManager.取得(interaction.guild);
+    const サーバー = await serverManager.取得(interaction.guild);
     guildCommandManagers.get(interaction.guildId).onInteraction(interaction);
+    (await サーバー.殿堂.取得(殿堂の名前.職業)).プレイヤー追加({
+      名前: "hoge",
+      色: "#EEDD33",
+      ギルド: "ほげ",
+      画像: "https://i.imgur.com/Qfho4Cu.png"
+    });
     return;
   }
 })

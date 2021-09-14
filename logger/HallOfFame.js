@@ -13,7 +13,7 @@ import { 全名前からスレッドを取得または作成 } from "../Util.js"
  * @readonly
  * @enum {string}
  */
-const スレッド名 = {
+export const 殿堂の名前 = {
   職業: "ジョブマスター",
   魔物: "モンスターマスター",
   武器: "ウェポンキラー",
@@ -37,9 +37,10 @@ export class 殿堂 {
 
   /**
    * 
-   * @param {string} 名前 スレッド名
+   * @param {殿堂の名前} 名前
+   * @returns {Promise<殿堂スレッド>}
    */
-  async スレッドを取得(名前) {
+  async 取得(名前) {
     if (this.#スレッドリスト === undefined) {
       await this.#fetch();
     }
@@ -50,7 +51,7 @@ export class 殿堂 {
    * スレッドをオンラインから取得
    */
   async #fetch() {
-    全名前からスレッドを取得または作成(await this.#チャンネル.threads.fetch(), スレッド名.values()).forEach(this.#スレッドリストに追加, this);
+    全名前からスレッドを取得または作成(await this.#チャンネル.threads.fetch(), Object.values(殿堂の名前)).forEach(this.#スレッドリストに追加, this);
   }
 
   /**
@@ -75,7 +76,7 @@ class 殿堂スレッド extends ログ書き込み君 {
     await super.全て書き込む([
       new MessageEmbed({
         title: `${プレイヤー.名前}＠${プレイヤー.ギルド.名前}`,
-        color: 色,
+        color: プレイヤー.色,
         fields: [
           {
             name: "記念日",
