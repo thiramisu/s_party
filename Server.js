@@ -88,6 +88,7 @@ export class サーバー {
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
     名前候補.delete(チャンネル名.メインカテゴリー);
+    console.log(チャンネルマネージャー.cache.values());
     for (const チャンネル of チャンネルマネージャー.cache.values()) {
       if (!名前候補.has(チャンネル) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
         continue;
