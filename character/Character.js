@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { ステータス } from "./Status.js"
@@ -482,6 +483,9 @@ export class メンバー extends ログインメンバー {
   set _現在地(_現在地名) { console.error("代わりに メンバー.prototype.場所移動(場所名) を使え"); }
 
   get 残り睡眠秒数() { return this._起床時刻 - 更新日時.取得(); }
+  get ギルド() { return this._ギルド; }
+  get 色() { return this._色; }
+  get アイコン() { return this._アイコン; }
   get _現在地() { return this.#現在地; }
   get 転職回数() { return this._転職回数; }
   get 現職() { return this._現職; }

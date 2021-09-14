@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { MessageEmbed } from "discord.js"
@@ -29,12 +30,12 @@ export class ログ書き込み君 {
   /**
    * embedsの最大数ごとに自動分割した上ですべての内容を書き込みます。
    * @param {Array<MessageEmbed>} embeds
-   * @param {string} 見出し 最初にembedsの外に表示する内容
+   * @param {string} [見出し] 最初にembedsの外に表示する内容
    */
   async 全て書き込む(embeds, 見出し) {
     const iMax = embeds.length;
     for (let i = 0; i < iMax; i += MAX_EMBED_COUNT_PER_MESSAGE) {
-      await this.#送信する(embeds.slice(i, i + MAX_EMBED_COUNT_PER_MESSAGE), 最初 ? 見出し : undefined);
+      await this.#送信する(embeds.slice(i, i + MAX_EMBED_COUNT_PER_MESSAGE), i === 0 ? 見出し : undefined);
     }
   }
 
@@ -44,11 +45,14 @@ export class ログ書き込み君 {
    * @param {ColorResolvable} 色 
    */
   async 書き込む(内容, 色 = DEFAULT_LOG_COLOR) {
-    await this.#チャンネル.send(
-      new MessageEmbed({
-        title: 内容,
-        color: 色
-      })
+    await this.#チャンネル.send({
+      embeds: [
+        new MessageEmbed({
+          title: 内容,
+          color: 色
+        })
+      ]
+    }
     );
   }
 

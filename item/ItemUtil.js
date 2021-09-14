@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 範囲, 連続 } from "../Util.js"

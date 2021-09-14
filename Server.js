@@ -1,6 +1,7 @@
+// @ts-check
 "use strict";
 
-import { Guild } from "discord.js";
+import { Guild, ThreadChannel } from "discord.js";
 import { 職業ランキング } from "./logger/JobRanking.js"
 import { 殿堂 } from "./logger/HallOfFame.js"
 import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
@@ -40,7 +41,7 @@ export const チャンネル名 = Object.freeze({
 });
 
 /**
- * @typedef {Object} サーバーチャンネル
+ * @typedef {Map<チャンネル名, CategoryChannel | TextChannel>} サーバーチャンネル チャンネル名とチャンネルの対応
  * @property {CategoryChannel} メインカテゴリー
  * @property {TextChannel} ニュース
  * @property {TextChannel} フォトコン
@@ -61,14 +62,14 @@ export class サーバー {
   constructor(guild, サーバーチャンネル) {
     this.guild = guild;
 
-    this.#ニュース = new ログ書き込み君(サーバーチャンネル.get(チャンネル名.ニュース));
+    this.#ニュース = new ログ書き込み君(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.ニュース)));
     this.#フォトコン = 0; // TODO
     this.#プレイヤー一覧 = 0; // TODO
     this.#ギルド勢力 = 0; // TODO
-    this.#チャレンジ記録 = new チャレンジ記録(サーバーチャンネル.get(チャンネル名.チャレンジ記録));
+    this.#チャレンジ記録 = new チャレンジ記録(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.チャレンジ記録)));
     this.#プレイヤーランキング = 0;  // TODO
     this.#殿堂 = new 殿堂(サーバーチャンネル.get(チャンネル名.殿堂));
-    this.#職業ランキング = new 職業ランキング(サーバーチャンネル.get(チャンネル名.職業ランキング));
+    this.#職業ランキング = new 職業ランキング(/** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
   }
 
   get ニュース() { return this.#ニュース; }
@@ -83,21 +84,21 @@ export class サーバー {
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @returns {Promise<Map<チャンネル名, TextChannel>>}
+   * @returns {Promise<Map<チャンネル名, GuildChannel>>}
    */
   static async 全テキストチャンネルを取得または作成する(チャンネルマネージャー) {
     const
       名前候補 = new Set(Object.values(チャンネル名)),
       /**
-       * @type {Map<チャンネル名, TextChannel>}
+       * @type {Map<チャンネル名, GuildChannel>}
        */
       結果 = new Map();
     const メインカテゴリー = await this.#メインカテゴリーを取得または作成する(チャンネルマネージャー);
     結果.set(チャンネル名.メインカテゴリー, メインカテゴリー);
     名前候補.delete(チャンネル名.メインカテゴリー);
-    for (const チャンネル of チャンネルマネージャー.cache.values()) {
+    for (const チャンネル of メインカテゴリー.children.values()) {
       const チャンネルの名前 = チャンネル.name;
-      if (!名前候補.has(チャンネルの名前) || チャンネル.parent !== メインカテゴリー || チャンネル.type !== "GUILD_TEXT") {
+      if (!名前候補.has(チャンネルの名前) || チャンネル.type !== "GUILD_TEXT") {
         continue;
       }
       結果.set(チャンネルの名前, チャンネル);
@@ -116,10 +117,10 @@ export class サーバー {
   /**
    * 
    * @param {GuildChannelManager} チャンネルマネージャー
-   * @returns {Promise<CategoryChannel}
+   * @returns {Promise<CategoryChannel>}
    */
   static async #メインカテゴリーを取得または作成する(チャンネルマネージャー) {
-    return チャンネルマネージャー.cache.find(this.#メインカテゴリーか)
+    return /** @type {CategoryChannel} */(チャンネルマネージャー.cache.find(this.#メインカテゴリーか))
       ?? (await チャンネルマネージャー.create(チャンネル名.メインカテゴリー, {
         type: "GUILD_CATEGORY"
       }));
@@ -127,7 +128,7 @@ export class サーバー {
 
   /**
    * 
-   * @param {GuildChannel} チャンネル 
+   * @param {GuildChannel | ThreadChannel} チャンネル 
    * @returns {boolean}
    */
   static #メインカテゴリーか(チャンネル) {

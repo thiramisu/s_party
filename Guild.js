@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 基底 } from "./Base.js"
@@ -14,7 +15,7 @@ export class ギルド extends 基底 {
     }
     this.#メンバー.delete(メンバー);
     if (メンバー === this.#ギルマス) {
-      ギルマス交代();
+      this.ギルマス交代();
     }
   }
 
@@ -32,7 +33,7 @@ export class ギルド extends 基底 {
   }
 
   #名前にギルマスを含む(メンバー) {
-    return this.#次期ギルマスか.test(メンバー.#名前);
+    return ギルド.#次期ギルマスか.test(メンバー.#名前);
   }
 
   toString() {

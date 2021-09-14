@@ -1,4 +1,4 @@
-
+// @ts-check
 "use strict";
 
 export class 錬金レシピ extends 陳列可能インターフェース {

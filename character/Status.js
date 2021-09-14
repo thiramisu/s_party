@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 export class 簡易ステータス {

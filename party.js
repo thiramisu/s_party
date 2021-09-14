@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import {
@@ -42,7 +43,7 @@ client.on('interactionCreate', async interaction => {
       名前: "hoge",
       色: "#EEDD33",
       ギルド: "ほげ",
-      画像: "https://i.imgur.com/Qfho4Cu.png"
+      アイコン: "https://i.imgur.com/Qfho4Cu.png"
     });
     return;
   }

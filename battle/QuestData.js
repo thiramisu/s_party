@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 class クエスト情報 extends 冒険場所の情報 {

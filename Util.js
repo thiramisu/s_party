@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 /**
@@ -83,53 +84,6 @@ export const
         reason: 理由
       });
       return thread;
-    },
-  全名前からスレッドを取得または作成 =
-    /**
-     * 
-     * @param {ThreadManager} スレッドマネージャー
-     * @param {Array<string>} 名前リスト
-     * @returns {Map<string, ThreadChannel>} 名前とスレッド名の対応リスト
-     */
-    async (スレッドマネージャー, 名前リスト) => {
-      const
-        名前候補 = new Set(名前リスト),
-        /**
-         * @type {Map<string, ThreadChannel>}
-         */
-        結果 = new Map();
-      for (const スレッド of (await スレッドマネージャー.fetchArchived()).threads.values()) {
-        const スレッド名 = スレッド.name;
-        if (名前候補.has(スレッド名)) {
-          await thread.setArchived(false);
-          結果.set(スレッド名, スレッド);
-          名前候補.delete(スレッド名);
-          if (名前候補.size === 0) {
-            return 結果;
-          }
-        }
-      }
-      for (const スレッド of (await スレッドマネージャー.fetch()).threads.values()) {
-        const スレッド名 = スレッド.name;
-        if (名前候補.has(スレッド名)) {
-          結果.set(スレッド名, スレッド);
-          名前候補.delete(スレッド名);
-          if (名前候補.size === 0) {
-            return 結果;
-          }
-        }
-      }
-      for (const 作成スレッド名 of 名前候補) {
-        結果.set(
-          作成スレッド名,
-          await スレッドマネージャー.create({
-            name: 名前,
-            autoArchiveDuration: 60,
-            reason: 理由
-          })
-        );
-      }
-      return 結果;
     }
   ;
 

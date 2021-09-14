@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 export class 酒場メニュー extends 陳列可能インターフェース {

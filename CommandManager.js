@@ -1,18 +1,20 @@
+// @ts-check
 "use strict";
 
 import { ApplicationCommand, Message } from "discord.js"
-import { MessageGetter }from "./MessageGetter.js"
+import { MessageGetter } from "./MessageGetter.js"
 
-class ApplicationCommandDefinition extends ApplicationCommand {
-  constructor() {
-    super();
-  }
-}
+/**
+ * @typedef {import("discord.js").ThreadManager} ThreadManager
+ * @typedef {import("discord.js").ThreadChannel} ThreadChannel
+ * @typedef {import("discord.js").CommandInteraction} CommandInteraction
+ * @typedef {import("discord.js").ApplicationCommandOptionData}  ApplicationCommandOptionData
+ */
 
 /**
  * 範囲内(または0~最大)の整数の乱数を返す
- * @param {Integer} max
- * @param {Integer} [min]
+ * @param {number} max
+ * @param {number} [min]
  * @param {Boolean} [isIncluded] 端を含めるか
  * @returns {Number}
  */
@@ -24,7 +26,7 @@ const integerRandom = (max, min = 0, isIncluded = false) =>
  * @param {ThreadManager} threads
  * @param {String} name
  * @param {String} [reason]
- * @returns {ThreadChannel}
+ * @returns {Promise<ThreadChannel>}
  */
 const getOrCreateThreadByName = async (threads, name, reason) => {
   for (const thread of (await threads.fetchArchived()).threads.values()) {
@@ -34,15 +36,15 @@ const getOrCreateThreadByName = async (threads, name, reason) => {
     }
   }
   for (const thread of (await threads.fetch()).threads.values()) {
-    console.log("1" + thread.name )
+    console.log("1" + thread.name);
     if (thread.name === name) {
-      return thread
+      return thread;
     }
   }
   const thread = await threads.create({
     name: name,
     autoArchiveDuration: 60,
-    reason: reason,
+    reason: reason
   })
   return thread;
 }
@@ -212,6 +214,6 @@ export class GuildCommandManager {
 /**
  *
  * @typedef {Object} ApplicationCommandDefinition
- * @property {Discord.ApplicationCommandOptionData} option
+ * @property {ApplicationCommandOptionData} option
  * @property {Function} name The name of the option
  */

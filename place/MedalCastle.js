@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 交換所 } from "./Shop.js"

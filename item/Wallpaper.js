@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 陳列可能インターフェース } from "./ItemInterface.js"

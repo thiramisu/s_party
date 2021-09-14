@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 class 何でも屋の依頼 extends 陳列可能インターフェース {

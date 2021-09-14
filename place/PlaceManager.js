@@ -1,9 +1,11 @@
+// @ts-check
+"use strict";
 
-import { キャラクター } from ('./Chalacter.js')
-import { クエスト } from ('./Quest.js')
-import { 家 } from ('./Home.js')
-import { ギルド } from ('./Guild.js')
-import { エラー } from ('./Error.js')
+import { キャラクター } from "../character/Character.js"
+import { クエスト } from "./Quest.js"
+import { 家 } from "./Home.js"
+import { ギルド } from "../Guild.js"
+import { エラー } from "../Error.js"
 
 export class 場所マネージャー {
   constructor() {

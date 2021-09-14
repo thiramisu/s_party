@@ -1,13 +1,13 @@
+// @ts-check
 "use strict";
 
 import {
   MessageEmbed,
-  TextChannel,
-  ThreadChannel
+  TextChannel
 } from "discord.js"
 import { ログ書き込み君 } from "./Logger.js"
 import { メンバー } from "../character/Character.js"
-import { 全名前からスレッドを取得または作成 } from "../Util.js"
+import { 記録スレッドマネージャー } from "../logger/RecordThreadManager.js"
 
 /**
  * @readonly
@@ -22,49 +22,15 @@ export const 殿堂の名前 = {
   錬金: "アルケミスト"
 };
 
-export class 殿堂 {
+export class 殿堂 extends 記録スレッドマネージャー{
   /**
    * 
    * @param {TextChannel} チャンネル 
+   * @param {Enumerator<string>} スレッド名リスト 
    */
-  constructor(チャンネル) {
-    this.#チャンネル = チャンネル;
-    /**
-     * @type {Map<string, 殿堂スレッド>}
-     */
-    this.#スレッドリスト = new Map();
+  constructor(チャンネル, スレッド名リスト) {
+    super(チャンネル, スレッド名リスト, 殿堂スレッド);
   }
-
-  /**
-   * 
-   * @param {殿堂の名前} 名前
-   * @returns {Promise<殿堂スレッド>}
-   */
-  async 取得(名前) {
-    if (this.#スレッドリスト === undefined) {
-      this.#スレッドリスト = await this.#fetch();
-    }
-    return this.#スレッドリスト.get(名前);
-  }
-
-  /**
-   * スレッドをオンラインから取得
-   */
-  async #fetch() {
-    全名前からスレッドを取得または作成(await this.#チャンネル.threads.fetch(), Object.values(殿堂の名前)).forEach(this.#スレッドリストに追加, this);
-  }
-
-  /**
-   * 
-   * @param {string} 名前 
-   * @param {ThreadChannel} スレッド 
-   */
-  #スレッドリストに追加(名前, スレッド) {
-    this.#スレッドリスト.set(名前, new 殿堂スレッド(スレッド));
-  }
-
-  #チャンネル;
-  #スレッドリスト;
 }
 
 class 殿堂スレッド extends ログ書き込み君 {
@@ -83,7 +49,7 @@ class 殿堂スレッド extends ログ書き込み君 {
             value: `0000/00/00`
           }
         ],
-        image: プレイヤー.画像
+        image: プレイヤー.アイコン
       })
     ]);
   }

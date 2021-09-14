@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 export class 陳列可能インターフェース {

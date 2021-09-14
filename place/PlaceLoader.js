@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 export class 場所別キャラクター読み込み君 {

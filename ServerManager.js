@@ -1,5 +1,7 @@
+// @ts-check
 "use strict";
 
+import { Collection } from "discord.js";
 import { サーバー } from "./Server.js"
 
 /**
@@ -9,7 +11,7 @@ import { サーバー } from "./Server.js"
 
 export class ServerManager {
   constructor() {
-    this.#初期化済みサーバーリスト = new Set();
+    this.#初期化済みサーバーリスト = new Collection();
   }
 
   /**
@@ -28,13 +30,13 @@ export class ServerManager {
     const
       チャンネルリスト = await サーバー.全テキストチャンネルを取得または作成する(_サーバー.channels),
       新サーバー = new サーバー(_サーバー, チャンネルリスト);
-    サーバーリスト.add(id, 新サーバー);
+    サーバーリスト.set(id, 新サーバー);
     return 新サーバー;
   }
 
   /**
    * 初期化済みサーバーの`Snowflake`一覧
-   * @type {Map<Snowflake, サーバー>}
+   * @type {Collection<Snowflake, サーバー>}
    */
   #初期化済みサーバーリスト;
 }

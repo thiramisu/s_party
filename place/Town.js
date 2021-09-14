@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 一般的な場所 } from "./Place.js"

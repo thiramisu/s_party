@@ -1,21 +1,22 @@
+// @ts-check
 "use strict";
 
 import { MessageEmbed } from "discord.js"
+import { メンバー } from "../character/Character.js"
 import { 戦闘メンバー } from "../battle/BattleMember.js"
-import { クエスト } from "../battle/Quest.js"
 import { ログ書き込み君 } from "./Logger.js"
 
-export class チャレンジ記録 extends ログ書き込み君 {
+/**
+ * @typedef {import("../battle/Quest.js").クエスト} クエスト
+ */
+export class プレイヤーランキング extends ログ書き込み君 {
   /**
    * 
-   * @param {Array<戦闘メンバー>} 戦闘メンバーリスト 
+   * @param {Array<メンバー>} 戦闘メンバーリスト 
    * @param {クエスト} クエスト
    */
-  async 更新(戦闘メンバーリスト, クエスト) {
-    super.全て書き込む(
-      戦闘メンバーリスト.map(this.#メンバーをembedへ, this),
-      `【${クエスト.ステージ.名前}】${クエスト.名前} Lv.${クエスト.ステージ.名前} (m/d HH:MM)`
-    );
+  async 更新(戦闘メンバーリスト , クエスト) {
+    // TODO
   }
 
   /**
@@ -23,11 +24,14 @@ export class チャレンジ記録 extends ログ書き込み君 {
    * @param {戦闘メンバー} 戦闘メンバー 
    * @returns {MessageEmbed}
    */
-  #メンバーをembedへ(戦闘メンバー) {
-    const ステータス = 戦闘メンバー.ステータス;
+  // TODO メンバーを戦闘メンバーから持ってくるかどうか
+  #メンバーをembedへ(順位, 戦闘メンバー) {
+    const
+      ステータス = 戦闘メンバー.ステータス,
+      メンバー = 戦闘メンバー.メンバー;
     return new MessageEmbed({
-      title: `${戦闘メンバー.名前}＠${戦闘メンバー.ギルド.名前}`,
-      color: 戦闘メンバー.色,
+      title: `${戦闘メンバー.名前}＠${メンバー.ギルド.名前}`,
+      color: メンバー.色,
       fields: [
         {
           name: "現職",
@@ -58,7 +62,7 @@ export class チャレンジ記録 extends ログ書き込み君 {
           value: ステータス.素早さ
         }
       ],
-      image: 戦闘メンバー.画像
+      image: 戦闘メンバー.アイコン
     });
   }
 }

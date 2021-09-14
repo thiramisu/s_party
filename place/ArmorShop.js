@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 import { 専門店 } from "./Shop.js"

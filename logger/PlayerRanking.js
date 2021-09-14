@@ -1,16 +1,21 @@
+// @ts-check
 "use strict";
 
 import { MessageEmbed } from "discord.js"
 import { メンバー } from "../character/Character.js"
+import { 戦闘メンバー } from "../battle/BattleMember.js"
 import { ログ書き込み君 } from "./Logger.js"
 
+/**
+ * @typedef {import("../battle/Quest.js").クエスト} クエスト
+ */
 export class プレイヤーランキング extends ログ書き込み君 {
   /**
    * 
    * @param {Array<メンバー>} 戦闘メンバーリスト 
    * @param {クエスト} クエスト
    */
-  async 更新(プレイヤーリスト) {
+  async 更新(戦闘メンバーリスト , クエスト) {
     // TODO
   }
 
@@ -20,10 +25,12 @@ export class プレイヤーランキング extends ログ書き込み君 {
    * @returns {MessageEmbed}
    */
   #メンバーをembedへ(順位, 戦闘メンバー) {
-    const ステータス = 戦闘メンバー.ステータス;
+    const
+      ステータス = 戦闘メンバー.ステータス,
+      メンバー = 戦闘メンバー.メンバー;
     return new MessageEmbed({
-      title: `${戦闘メンバー.名前}＠${戦闘メンバー.ギルド.名前}`,
-      color: 戦闘メンバー.色,
+      title: `${戦闘メンバー.名前}＠${メンバー.ギルド.名前}`,
+      color: メンバー.色,
       fields: [
         {
           name: "現職",
@@ -54,7 +61,7 @@ export class プレイヤーランキング extends ログ書き込み君 {
           value: ステータス.素早さ
         }
       ],
-      image: 戦闘メンバー.画像
+      image: 戦闘メンバー.アイコン
     });
   }
 }

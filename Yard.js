@@ -1,3 +1,4 @@
+// @ts-check
 "use strict";
 
 class 倉庫 {
