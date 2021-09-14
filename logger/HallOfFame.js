@@ -42,7 +42,7 @@ export class 殿堂 {
    */
   async 取得(名前) {
     if (this.#スレッドリスト === undefined) {
-      await this.#fetch();
+      this.#スレッドリスト = await this.#fetch();
     }
     return this.#スレッドリスト.get(名前);
   }
