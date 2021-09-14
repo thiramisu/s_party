@@ -10,11 +10,7 @@ import {
 import { GuildCommandManager } from "./CommandManager.js"
 import { ServerManager } from "./ServerManager.js";
 import { 場所 } from "./place/Place.js"
-import {
-  サーバー,
-  チャンネル名
-} from "./Server.js"
-import { 殿堂の名前 } from "./logger/HallOfFame";
+import { 殿堂の名前 } from "./logger/HallOfFame.js";
 
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
