@@ -6,6 +6,7 @@ import {
   TextChannel,
   ThreadChannel
 } from "discord.js"
+import { 基底 } from "../Base.js";
 
 /**
  * @typedef {import("discord.js").ThreadManager} ThreadManager
@@ -15,14 +16,15 @@ import {
 /**
  * @template {ログ書き込み君} T
  */
-export class 記録スレッドマネージャー {
+export class 記録スレッドマネージャー extends 基底 {
   /**
-   * 
-   * @param {TextChannel} チャンネル 
+   * @param {import("../Server.js").サーバー} サーバー
+   * @param {TextChannel} チャンネル
    * @param {Iterable<string>} スレッド名リスト
    * @param {import("discord.js").Constructable<T>} ログ書き込み君継承クラス
    */
-  constructor(チャンネル, スレッド名リスト, ログ書き込み君継承クラス) {
+  constructor(サーバー, チャンネル, スレッド名リスト, ログ書き込み君継承クラス) {
+    super(サーバー);
     this.#チャンネル = チャンネル;
     this.#スレッド名リスト = スレッド名リスト;
     this.#スレッドリスト = new Map();
@@ -37,7 +39,6 @@ export class 記録スレッドマネージャー {
   async 取得(名前) {
     const スレッドリスト = this.#スレッドリスト;
     if (スレッドリスト.has(名前)) {
-      console.log("読み込み済み");
       return スレッドリスト.get(名前);
     }
     await this.#全名前からスレッドを取得または作成();
@@ -54,10 +55,8 @@ export class 記録スレッドマネージャー {
       名前候補 = new Set(this.#スレッド名リスト);
     await スレッドマネージャー.fetchArchived();
     await スレッドマネージャー.fetch();
-    console.log("fetch end");
     for (const スレッド of スレッドマネージャー.cache.values()) {
       const スレッド名 = スレッド.name;
-      console.log("あった: " + スレッド名);
       if (!名前候補.has(スレッド名)) {
         continue;
       }
@@ -84,8 +83,7 @@ export class 記録スレッドマネージャー {
    * @param {ThreadChannel} スレッド 
    */
   #スレッドリストに追加(名前, スレッド) {
-    console.log("追加成功 :" + スレッド.name);
-    this.#スレッドリスト.set(名前, new this.#ログ書き込み君継承クラス(スレッド));
+    this.#スレッドリスト.set(名前, new this.#ログ書き込み君継承クラス(this.サーバー, スレッド));
   }
 
   #チャンネル;

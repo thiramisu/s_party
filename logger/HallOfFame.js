@@ -24,11 +24,11 @@ export const 殿堂の名前 = {
 
 export class 殿堂 extends 記録スレッドマネージャー {
   /**
-   * 
-   * @param {TextChannel} チャンネル 
+   * @param {import("../Server.js").サーバー} サーバー
+   * @param {TextChannel} チャンネル
    */
-  constructor(チャンネル) {
-    super(チャンネル, Object.values(殿堂の名前), 殿堂スレッド);
+  constructor(サーバー, チャンネル) {
+    super(サーバー, チャンネル, Object.values(殿堂の名前), 殿堂スレッド);
   }
 }
 

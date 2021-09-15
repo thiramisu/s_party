@@ -28,7 +28,6 @@ export class ログ書き込み君 extends 基底 {
    */
   constructor(サーバー, チャンネル) {
     super(サーバー);
-    console.trace(チャンネル);
     this.#チャンネル = チャンネル;
   }
 
