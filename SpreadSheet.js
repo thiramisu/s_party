@@ -171,7 +171,7 @@ export class Spreadsheet {
    * 
    * @param {SearchCategory} resultCategory
    * @param {Object.<SearchCategory, CellValueResolvable>} nameValuePairs 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | import("google-spreadsheet").GoogleSpreadsheetFormulaError>}
    */
   static async #searcher(resultCategory, nameValuePairs) {
     await this.#initIfNeeded();

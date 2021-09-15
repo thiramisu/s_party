@@ -47,6 +47,8 @@ client.on('interactionCreate', async interaction => {
     });
     const hoge = await Spreadsheet.searchServer("13");
     console.log(hoge);
+    const fuga = await Spreadsheet.searchServer("16");
+    console.log(fuga);
     サーバー.ニュース.書き込む(hoge.toString());
     return;
   }
