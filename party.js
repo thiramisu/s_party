@@ -11,6 +11,7 @@ import {
 import { GuildCommandManager } from "./CommandManager.js"
 import { ServerManager } from "./ServerManager.js";
 import { 殿堂の名前 } from "./logger/HallOfFame.js";
+import { Spreadsheet } from "./SpreadSheet.js";
 
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
@@ -44,6 +45,8 @@ client.on('interactionCreate', async interaction => {
       ギルド: "ほげ",
       アイコン: "https://i.imgur.com/Qfho4Cu.png"
     });
+    const hoge = await Spreadsheet.searchServer("13");
+    サーバー.ニュース.書き込む(hoge.toString());
     return;
   }
 })
