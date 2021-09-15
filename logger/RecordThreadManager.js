@@ -42,7 +42,6 @@ export class 記録スレッドマネージャー extends 基底 {
       return スレッドリスト.get(名前);
     }
     await this.#全名前からスレッドを取得または作成();
-    console.log(this.#スレッドリスト.get(名前));
     return this.#スレッドリスト.get(名前);
   }
 
