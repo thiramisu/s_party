@@ -53,9 +53,10 @@ export class 記録スレッドマネージャー {
       名前候補 = new Set(this.#スレッド名リスト);
     await スレッドマネージャー.fetchArchived();
     await スレッドマネージャー.fetch();
+    console.log("fetch end");
     for (const スレッド of スレッドマネージャー.cache.values()) {
       const スレッド名 = スレッド.name;
-      console.log(スレッド名);
+      console.log("あった: " + スレッド名);
       if (!名前候補.has(スレッド名)) {
         continue;
       }
@@ -82,7 +83,7 @@ export class 記録スレッドマネージャー {
    * @param {ThreadChannel} スレッド 
    */
   #スレッドリストに追加(名前, スレッド) {
-    console.log(スレッド.name);
+    console.log("追加成功 :" + スレッド.name);
     this.#スレッドリスト.set(名前, new this.#ログ書き込み君継承クラス(スレッド));
   }
 
