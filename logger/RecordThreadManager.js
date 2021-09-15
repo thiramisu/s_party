@@ -54,6 +54,7 @@ export class 記録スレッドマネージャー {
     await スレッドマネージャー.fetch();
     for (const スレッド of スレッドマネージャー.cache.values()) {
       const スレッド名 = スレッド.name;
+      console.log(スレッド名);
       if (!名前候補.has(スレッド名)) {
         continue;
       }
