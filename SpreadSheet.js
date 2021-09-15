@@ -155,8 +155,9 @@ export class Spreadsheet {
     this.#searchSheet = spreadsheet.sheetsByTitle[SHEET_NAME.search];
     this.#searchCell = new Map();
     this.#resultCell = new Map();
+    await this.#searchSheet.loadCells("B2:D10");
     for (const [name, row] of SEARCH_ROW) {
-      await this.#searchSheet.loadCells("B2:D10");
+      console.log(row, "x", SEARCH_INPUT_COLUMN);
       this.#searchCell.set(name, this.#searchSheet.getCell(row, SEARCH_INPUT_COLUMN));
       this.#resultCell.set(name, this.#searchSheet.getCell(row, SEARCH_OUTPUT_COLUMN));
     }
