@@ -6,7 +6,7 @@ import {
   武器,
   防具,
   道具
-} from "../item/ItemInterface.js"
+} from "../item/Item.js"
 
 /**
  * @typedef {import("./Character.js").キャラクター} キャラクター
