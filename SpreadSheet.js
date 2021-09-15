@@ -164,6 +164,7 @@ export class Spreadsheet {
       this.#searchCell.set(name, this.#searchSheet.getCell(row - 1, SEARCH_INPUT_COLUMN - 1));
       this.#resultCell.set(name, this.#searchSheet.getCell(row - 1, SEARCH_OUTPUT_COLUMN - 1));
     }
+    console.log("スプレッドシート初期化完了");
   }
 
   /**

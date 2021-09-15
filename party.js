@@ -46,6 +46,7 @@ client.on('interactionCreate', async interaction => {
       アイコン: "https://i.imgur.com/Qfho4Cu.png"
     });
     const hoge = await Spreadsheet.searchServer("13");
+    console.log(hoge);
     サーバー.ニュース.書き込む(hoge.toString());
     return;
   }
