@@ -7,6 +7,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet"
  * @typedef {import("discord.js").Snowflake} Snowflake
  * @typedef {import("google-spreadsheet").GoogleSpreadsheetWorksheet} GoogleSpreadsheetWorksheet
  * @typedef {import("google-spreadsheet").GoogleSpreadsheetCell} GoogleSpreadsheetCell
+ * @typedef {import("google-spreadsheet").GoogleSpreadsheetFormulaError} GoogleSpreadsheetFormulaError
  */
 
 /**
@@ -50,11 +51,15 @@ const SEARCH_ROW = new Map([
 const SEARCH_INPUT_COLUMN = 2;
 const SEARCH_OUTPUT_COLUMN = 3;
 
+/**
+ * 
+ * <warn>型に注意(`"42"` !== `42`)</warn>
+ */
 export class Spreadsheet {
   /**
    * 
    * @param {Snowflake} serverID 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchServer(serverID) {
     return this.#searcher("serverID", { serverID });
@@ -64,7 +69,7 @@ export class Spreadsheet {
    * 
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchPlayer(serverID, playerID) {
     return this.#searcher("playerID", { serverID, playerID });
@@ -75,7 +80,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} storedItemName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchPlayerStoredItem(serverID, playerID, storedItemName) {
     return this.#searcher("storedItemName", { serverID, playerID, storedItemName });
@@ -86,7 +91,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} storedMonsterName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchPlayerStoredMonster(serverID, playerID, storedMonsterName) {
     return this.#searcher("storedItemName", { serverID, playerID, storedMonsterName });
@@ -95,7 +100,7 @@ export class Spreadsheet {
   /**
    * @param {Snowflake} serverID
    * @param {string} guildName
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchGuild(serverID, guildName) {
     return this.#searcher("guildName", { serverID, guildName });
@@ -106,7 +111,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} loggedInPlayerName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchLoggedInPlayer(serverID, playerID, loggedInPlayerName) {
     return this.#searcher("loggedInPlayerName", { serverID, playerID, loggedInPlayerName });
@@ -117,7 +122,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} questName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchQuest(serverID, playerID, questName) {
     return this.#searcher("questName", { serverID, playerID, questName });
@@ -128,7 +133,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} helperRequestName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchHelperRequest(serverID, playerID, helperRequestName) {
     return this.#searcher("helperRequestName", { serverID, playerID, helperRequestName });
@@ -139,7 +144,7 @@ export class Spreadsheet {
    * @param {Snowflake} serverID 
    * @param {Snowflake} playerID 
    * @param {string} mashedPlayerName 
-   * @returns {Promise<CellValueResolvable>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static searchMashedPlayer(serverID, playerID, mashedPlayerName) {
     return this.#searcher("mashedPlayerName", { serverID, playerID, mashedPlayerName });
@@ -168,10 +173,9 @@ export class Spreadsheet {
   }
 
   /**
-   * 
    * @param {SearchCategory} resultCategory
    * @param {Object.<SearchCategory, CellValueResolvable>} nameValuePairs 
-   * @returns {Promise<CellValueResolvable | import("google-spreadsheet").GoogleSpreadsheetFormulaError>}
+   * @returns {Promise<CellValueResolvable | GoogleSpreadsheetFormulaError>}
    */
   static async #searcher(resultCategory, nameValuePairs) {
     await this.#initIfNeeded();
