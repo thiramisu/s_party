@@ -37,6 +37,7 @@ export class 記録スレッドマネージャー {
   async 取得(名前) {
     const スレッドリスト = this.#スレッドリスト;
     if (スレッドリスト.has(名前)) {
+      console.log("読み込み済み");
       return スレッドリスト.get(名前);
     }
     await this.#全名前からスレッドを取得または作成();
