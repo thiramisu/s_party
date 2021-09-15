@@ -147,6 +147,8 @@ export class Spreadsheet {
     }
     const spreadsheet = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
     this.#spreadsheet = spreadsheet;
+    console.log(process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL);
+    console.log(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
     await spreadsheet.useServiceAccountAuth({
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
       private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
