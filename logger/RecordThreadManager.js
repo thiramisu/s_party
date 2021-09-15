@@ -50,6 +50,8 @@ export class 記録スレッドマネージャー {
        * @type {Set<string>}
        */
       名前候補 = new Set(this.#スレッド名リスト);
+    await スレッドマネージャー.fetchArchived();
+    await スレッドマネージャー.fetch();
     for (const スレッド of スレッドマネージャー.cache.values()) {
       const スレッド名 = スレッド.name;
       if (!名前候補.has(スレッド名)) {
@@ -61,29 +63,6 @@ export class 記録スレッドマネージャー {
       this.#スレッドリストに追加(スレッド名, スレッド);
       名前候補.delete(スレッド名);
     }
-    /*
-    for (const スレッド of (await スレッドマネージャー.fetchArchived()).threads.values()) {
-      const スレッド名 = スレッド.name;
-      if (名前候補.has(スレッド名)) {
-        await thread.setArchived(false);
-        結果.set(スレッド名, スレッド);
-        名前候補.delete(スレッド名);
-        if (名前候補.size === 0) {
-          return 結果;
-        }
-      }
-    }
-    for (const スレッド of (await スレッドマネージャー.fetch()).threads.values()) {
-      const スレッド名 = スレッド.name;
-      if (名前候補.has(スレッド名)) {
-        結果.set(スレッド名, スレッド);
-        名前候補.delete(スレッド名);
-        if (名前候補.size === 0) {
-          return 結果;
-        }
-      }
-    }
-    */
     for (const 作成スレッド名 of 名前候補) {
       this.#スレッドリストに追加(
         作成スレッド名,
