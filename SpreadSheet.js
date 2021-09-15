@@ -147,8 +147,6 @@ export class Spreadsheet {
     }
     const spreadsheet = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
     this.#spreadsheet = spreadsheet;
-    console.log(process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL);
-    console.log(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
     await spreadsheet.useServiceAccountAuth({
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
       private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
@@ -158,6 +156,7 @@ export class Spreadsheet {
     this.#searchCell = new Map();
     this.#resultCell = new Map();
     for (const [name, row] of SEARCH_ROW) {
+      await this.#searchSheet.loadCells("B2:D10");
       this.#searchCell.set(name, this.#searchSheet.getCell(row, SEARCH_INPUT_COLUMN));
       this.#resultCell.set(name, this.#searchSheet.getCell(row, SEARCH_OUTPUT_COLUMN));
     }
