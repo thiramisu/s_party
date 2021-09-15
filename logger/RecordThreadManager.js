@@ -40,7 +40,7 @@ export class 記録スレッドマネージャー {
       return スレッドリスト.get(名前);
     }
     await this.#全名前からスレッドを取得または作成();
-    console.log(`名前: ${名前} のスレッドを検索`);
+    console.log(this.#スレッドリスト.get(名前));
     return this.#スレッドリスト.get(名前);
   }
 
