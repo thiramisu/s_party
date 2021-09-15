@@ -151,7 +151,7 @@ export class Spreadsheet {
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
       private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
     });
-    spreadsheet.loadInfo();
+    await spreadsheet.loadInfo();
     this.#searchSheet = spreadsheet.sheetsByTitle[SHEET_NAME.search];
     this.#searchCell = new Map();
     this.#resultCell = new Map();
