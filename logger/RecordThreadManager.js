@@ -82,6 +82,7 @@ export class 記録スレッドマネージャー {
    * @param {ThreadChannel} スレッド 
    */
   #スレッドリストに追加(名前, スレッド) {
+    console.log(スレッド.name);
     this.#スレッドリスト.set(名前, new this.#ログ書き込み君継承クラス(スレッド));
   }
 
