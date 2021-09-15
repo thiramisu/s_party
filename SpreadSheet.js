@@ -29,6 +29,7 @@ const SHEET_NAME = {
 };
 
 /**
+ * 最初の行は1
  * @type {Map<SearchCategory,Row>}
  */
 const SEARCH_ROW = new Map([
@@ -43,6 +44,9 @@ const SEARCH_ROW = new Map([
   ["mashedPlayerName", 10]
 ]);
 
+/**
+ * 最初の列は1
+ */
 const SEARCH_INPUT_COLUMN = 2;
 const SEARCH_OUTPUT_COLUMN = 3;
 
@@ -157,9 +161,8 @@ export class Spreadsheet {
     this.#resultCell = new Map();
     await this.#searchSheet.loadCells("B2:D10");
     for (const [name, row] of SEARCH_ROW) {
-      console.log(row, "x", SEARCH_INPUT_COLUMN);
-      this.#searchCell.set(name, this.#searchSheet.getCell(row, SEARCH_INPUT_COLUMN));
-      this.#resultCell.set(name, this.#searchSheet.getCell(row, SEARCH_OUTPUT_COLUMN));
+      this.#searchCell.set(name, this.#searchSheet.getCell(row - 1, SEARCH_INPUT_COLUMN - 1));
+      this.#resultCell.set(name, this.#searchSheet.getCell(row - 1, SEARCH_OUTPUT_COLUMN - 1));
     }
   }
 
