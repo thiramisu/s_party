@@ -1,8 +1,10 @@
 // @ts-check
 "use strict";
 
-import { ApplicationCommand, Message } from "discord.js"
-import { MessageGetter } from "./MessageGetter.js"
+import { ApplicationCommand, Interaction, Message } from "discord.js"
+import { MessageGetter } from "../MessageGetter.js"
+import { 一般的な場所 } from "../place/Place.js";
+import { 武器屋 } from "../place/WeaponShop.js";
 
 /**
  * @typedef {import("discord.js").ThreadManager} ThreadManager
@@ -51,7 +53,7 @@ const getOrCreateThreadByName = async (threads, name, reason) => {
 
 const commands = [
   {
-    name: 'party2',
+    name: 'party',
     description: 'humu',
     exec: async interaction => {
       const options = interaction.options;
@@ -90,8 +92,8 @@ const commands = [
       {
         type: 'SUB_COMMAND',
         name: 'new-entry',
-        japanese: '＠新規登録',
-        description: '＠新規登録 - 説明書の初心者ﾌﾟﾚｲﾁｬｰﾄ必読',
+        japanese: '/新規登録',
+        description: '/新規登録 - 説明書の初心者ﾌﾟﾚｲﾁｬｰﾄ必読',
         options: [
           {
             type: 'STRING',
@@ -132,65 +134,81 @@ const commands = [
       {
         type: 'SUB_COMMAND',
         name: 'wiki',
-        japanese: '＠説明書',
-        description: '＠説明書 - ＠パーティーIIについて',
+        japanese: '/説明書',
+        description: '/説明書 - /パーティーIIについて',
       },
       {
         type: 'SUB_COMMAND',
         name: 'news',
-        japanese: '＠ニュース',
-        description: '＠ニュース - 最近の出来事',
+        japanese: '/ニュース',
+        description: '/ニュース - 最近の出来事',
       },
       {
         type: 'SUB_COMMAND',
         name: 'contest',
-        japanese: '＠フォトコン',
-        description: '＠フォトコン - みんなが撮ったｽｸｰﾌﾟ映像',
+        japanese: '/フォトコン',
+        description: '/フォトコン - みんなが撮ったｽｸｰﾌﾟ映像',
       },
       {
         type: 'SUB_COMMAND',
         name: 'player-list',
-        japanese: '＠ﾌﾟﾚｲﾔｰ一覧',
-        description: '＠ﾌﾟﾚｲﾔｰ一覧 - 転職回数、レベル順',
+        japanese: '/ﾌﾟﾚｲﾔｰ一覧',
+        description: '/ﾌﾟﾚｲﾔｰ一覧 - 転職回数、レベル順',
       },
       {
         type: 'SUB_COMMAND',
         name: 'guild',
-        japanese: '＠ギルド勢力',
-        description: '＠ギルド勢力 - 各ギルドとそのメンバー',
+        japanese: '/ギルド勢力',
+        description: '/ギルド勢力 - 各ギルドとそのメンバー',
       },
       {
         type: 'SUB_COMMAND',
         name: 'challenge',
-        japanese: '＠世界記録',
-        description: '＠世界記録 - ＠チャレンジの最高記録保持者',
+        japanese: '/世界記録',
+        description: '/世界記録 - /チャレンジの最高記録保持者',
       },
       {
         type: 'SUB_COMMAND',
         name: 'ranking',
-        japanese: '＠ランキング',
-        description: '＠ランキング - 活躍しているトッププレイヤー',
+        japanese: '/ランキング',
+        description: '/ランキング - 活躍しているトッププレイヤー',
       },
       {
         type: 'SUB_COMMAND',
         name: 'legend',
-        japanese: '＠伝説のﾌﾟﾚｲﾔｰ',
-        description: '＠伝説のﾌﾟﾚｲﾔｰ - コンプリートプレイヤー',
+        japanese: '/伝説のﾌﾟﾚｲﾔｰ',
+        description: '/伝説のﾌﾟﾚｲﾔｰ - コンプリートプレイヤー',
       },
       {
         type: 'SUB_COMMAND',
         name: 'job-ranking',
-        japanese: '＠職業ランキング',
-        description: '＠人気の職業は！？',
+        japanese: '/職業ランキング',
+        description: '/職業ランキング - 人気の職業は！？',
       },
       {
         type: 'SUB_COMMAND',
         name: 'escape',
-        japanese: '＠救出処理',
-        description: '＠救出処理 - バグ救出',
-      },
+        japanese: '/救出処理',
+        description: '/救出処理 - バグ救出',
+      }
     ],
   },
+  {
+    name: "pact",
+    description: "行動",
+    exec: async (interaction, server) => {
+      if (!ユーザー認証(interaction.guild, interaction.member)) {
+        interaction.reply("まずは/party new-entryから新規登録をしてください");
+        return;
+      }
+      server.プレイヤー.get(interaction.member);
+    },
+    options: [武器屋, 一般的な場所].map((場所) => 場所.コマンド.オプションへ())
+  },
+  {
+    name: "pskl",
+    description: "戦闘スキル"
+  }
 ]
 
 const commandList = new Map(commands.map(command => [command.name, command]));

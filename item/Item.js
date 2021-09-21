@@ -6,7 +6,7 @@ import { 整数乱数, 範囲 } from "../Util.js";
 import { 取引アイテムインターフェース } from "./ItemInterface.js";
 import { アイテム範囲, アイテム名前範囲, アイテム連続 } from "./ItemUtil.js"
 
-class アイテム extends 取引アイテムインターフェース {
+export class アイテム extends 取引アイテムインターフェース {
   constructor(名前, 価値) {
     super(名前, 価値);
     this.#ID = アイテム.#自動ID++;

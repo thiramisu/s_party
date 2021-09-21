@@ -8,7 +8,7 @@ import {
   Client,
   Permissions,
 } from "discord.js"
-import { GuildCommandManager } from "./CommandManager.js"
+import { GuildCommandManager } from "./command/CommandManager.js"
 import { ServerManager } from "./ServerManager.js";
 import { 殿堂の名前 } from "./logger/HallOfFame.js";
 import { Spreadsheet } from "./SpreadSheet.js";
@@ -39,12 +39,14 @@ client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
     const サーバー = await serverManager.取得(interaction.guild);
     guildCommandManagers.get(interaction.guildId).onInteraction(interaction);
+    /*
     (await サーバー.殿堂.取得(殿堂の名前.職業)).プレイヤー追加({
       名前: "hoge",
       色: "#EEDD33",
       ギルド: "ほげ",
       アイコン: "https://i.imgur.com/Qfho4Cu.png"
     });
+    */
     const hoge = await Spreadsheet.searchServer("13");
     console.log(hoge);
     const fuga = await Spreadsheet.searchServer("16");

@@ -4,7 +4,7 @@
 import { 基底 } from "../Base.js";
 import { メンバー } from "./Character.js";
 import { ステータス } from "./Status.js";
-import { 色名 } from "../config.js"
+import { 色名 } from "../config.js";
 import { 整数乱数 } from "../Util.js";
 
 const プレイヤー一覧の更新周期日数 = Infinity;

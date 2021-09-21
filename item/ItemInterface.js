@@ -7,6 +7,10 @@ export class 陳列可能インターフェース {
   }
 
   // TODO 数を区切って表示
+  /**
+   * @param {IterableIterator<any>} 商品リスト
+   * @param {string} クリック時のこうどう名
+   */
   static 陳列棚出力(商品リスト, クリック時のこうどう名, 価格係数 = 1) {
     const
       table = document.createElement("table"),
@@ -31,6 +35,10 @@ export class 陳列可能インターフェース {
 
   get 名前() { return this.#名前; }
 
+  /**
+   * @param {string} クリック時のこうどう名
+   * @param {any[]} 陳列用項目名リスト
+   */
   _陳列用出力(クリック時のこうどう名, ...陳列用項目名リスト) {
     return テーブル行出力(陳列用項目名リスト, クリック時のこうどう名 ? `＠${クリック時のこうどう名}>${this.名前} ` : undefined, false);
   };

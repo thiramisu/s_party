@@ -9,6 +9,10 @@
 export const
   // "最大"-1が実際の最大なので注意(配列中のランダムな要素の取得に便利なので)
   整数乱数 = (最大, 最小 = 0, 端を含める = false) => Math.floor(Math.random() * (最大 - 最小 + (端を含める ? 1 : 0))) + 最小,
+  /**
+   * @type {(確率: number) => boolean}
+   * @returns {boolean} 成功ならtrue
+   */
   確率 = (確率) => Math.random() < 確率,
   ランダムな1要素 = (配列) => 配列[整数乱数(配列.length)],
   半角か = new RegExp(/[ -~]/),

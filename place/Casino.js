@@ -1,33 +1,25 @@
 // @ts-check
 "use strict";
 
-import { 一般的な場所 } from "./Place.js"
+import { 一般的な場所 } from "./General.js"
+import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
+import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
+import { ランダムな1要素 } from "../Util.js";
 
 
 export class カジノ extends 一般的な場所 {
   constructor() {
     super("casino.gif", 場所._訪問方法.いどう, new キャラクター("@ﾊﾞﾆｰ", "chr/020.gif"));
-    this._こうどうリストリスト.unshift(new こうどうマネージャー(null,
-      new こうどう("つくる"),
-      new こうどう("さんか"),
-      new こうどう("けんがく"),
-      new こうどう("＄1すろっと", () => { this.#スロット(1); }),
-      new こうどう("＄10すろっと", () => { this.#スロット(10); }),
-      new こうどう("＄50すろっと", () => { this.#スロット(50); }),
-      new こうどう("＄100すろっと", () => { this.#スロット(100); }),
-      new こうどう("こうかん"),
-      new こうどう("りょうがえ")
-    ));
   }
 
-  ヘッダー出力() {
+  ヘッダー出力(プレイヤー) {
     const 断片 = document.createDocumentFragment();
     断片.append(
       super._ヘッダー用出力(),
       ` コイン`,
-      あなた.メンバー.カジノコイン.ヘッダー用出力(),
+      プレイヤー.カジノコイン.ヘッダー用出力(),
       "枚 / ゴールド",
-      あなた.メンバー.所持金.ヘッダー用出力(),
+      プレイヤー.所持金.ヘッダー用出力(),
       "G"
       // TODO 部屋一覧
     );
@@ -48,11 +40,11 @@ export class カジノ extends 一般的な場所 {
     super._NPCをしらべる(`${this._NPC.名前}「きゃぁッ☆エッチィ～☆」`);
   }
 
-  #スロット(賭けた枚数) {
-    if (あなた.メンバー.疲労確認()) {
+  #スロット(プレイヤー, 賭けた枚数) {
+    if (プレイヤー.疲労確認()) {
       return;
     }
-    if (!あなた.メンバー.カジノコイン.収支(-賭けた枚数)) {
+    if (!プレイヤー.カジノコイン.収支(-賭けた枚数)) {
       通知欄.追加(`＄${賭けた枚数}スロットをするコインが足りません。「＠りょうがえ」でコインを両替してください`, "＠りょうがえ ");
       return;
     }
@@ -88,9 +80,31 @@ export class カジノ extends 一般的な場所 {
     if (払い戻し === 0) {
       通知内容.push("ハズレ");
     }
-    あなた.メンバー.カジノコイン.収支(払い戻し);
+    プレイヤー.カジノコイン.収支(払い戻し);
     通知欄.追加(通知内容, `＠＄${賭けた枚数}すろっと`);
   }
+  
+  static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
+
+  static #コマンドを登録() {
+    this.#コマンド = new PlaceCommandGroup("casino", "カジノ");
+    this.#コマンド.追加(
+      new PlaceActionCommand("order", this.prototype.つくる),
+      new PlaceActionCommand("order", this.prototype.さんか),
+      new PlaceActionCommand("order", this.prototype.けんがく),
+      new PlaceActionCommand("order", this.prototype.＄1すろっと),
+      new PlaceActionCommand("order", this.prototype.＄10すろっと),
+      new PlaceActionCommand("order", this.prototype.＄100すろっと),
+      new PlaceActionCommand("order", this.prototype.こうかん),
+      new PlaceActionCommand("order", this.prototype.りょうがえ)
+    );
+    return this.#コマンド;
+  }
+
+  /**
+   * @type {PlaceCommandGroup}
+   */
+  static #コマンド;
 }
 
 class スロットの記号 {

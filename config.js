@@ -5,6 +5,7 @@
  * @enum {import("discord.js").ColorResolvable} カラーコード
  */
 export const 色名 = {
+  デフォルト: "#EEE",
   /** 行動することはできません、戦う相手が見つかりませんなど強調文字 */
   強調: "#FF6",
   /** ダメージの数字 */

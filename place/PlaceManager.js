@@ -110,4 +110,8 @@ export class 場所マネージャー {
       まち: Symbol("まち")
     });
     */
+
+  static #家一覧 = new Map(); // TODO [所有者名, new 家]
+  static #クエスト一覧 = new Map(); // TODO [クエスト名, new クエスト]
+  static #ギルド一覧 = new Map(); // TODO [ギルド名, new ギルド]
 }

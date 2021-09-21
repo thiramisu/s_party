@@ -8,9 +8,12 @@ import { モンスター倉庫, アイテム倉庫 } from "./Yard.js"
 import { 通貨 } from "../Currency.js"
 import { 家 } from "../place/Home.js"
 import { ログ書き込み君 } from "../logger/Logger.js"
-import { キャラクター装備マネージャー } from "./CharacterEquipmentManager.js"
+import { 装備スロットマネージャー } from "./EquipmentSlotManager.js"
 import { 色名 } from "../config.js";
 import { プレイヤー錬金レシピマネージャー } from "./PlayerAlchemyRecipeManager.js";
+import { 場所 } from "../place/Place.js";
+import { メンバーの職業 } from "./MemberJob.js";
+import { アイテム } from "../item/Item.js";
 
 /**
  * @typedef {import("discord.js").ColorResolvable} ColorResolvable
@@ -24,10 +27,10 @@ export class キャラクター extends 基底 {
    * @param {string} 名前 
    * @param {string} アイコン 
    * @param {ColorResolvable} 色 
-   * @param {*} 最終更新日時 
+   * @param {number} 最終更新日時 
    * @param {*} 場所別ID 
    */
-  constructor(サーバー, 名前, アイコン, 色 = 色名.NPC, 最終更新日時, 場所別ID) {
+  constructor(サーバー, 名前, アイコン, 色 = 色名.NPC, 最終更新日時 = Infinity, 場所別ID) {
     super(サーバー);
     this._名前 = 名前;
     this._アイコン = アイコン;
@@ -58,14 +61,20 @@ export class キャラクター extends 基底 {
     return this._最終更新日時 + メンバー表示秒数 < 更新日時.取得();
   }
 
-  はあなた() {
-    return this._名前 === あなた.名前;
+  /**
+   * @param {キャラクター} キャラクター
+   */
+  は(キャラクター) {
+    return this._名前 === キャラクター.名前;
   }
 
   はNPC色() {
-    return this._色 === NPC色;
+    return this._色 === 色名.NPC;
   }
 
+  /**
+   * @param {string} 色コード
+   */
   色を変更(色コード) {
     if (typeof 色コード !== "string") {
       return undefined;
@@ -110,8 +119,21 @@ export class ログインメンバー extends キャラクター {
   _ギルド名;
   _めっせーじ;
 
+  /**
+   * 
+   * @param {boolean} ギルドを出力する 
+   * @param {boolean} めっせーじを出力する 
+   * @param {boolean} 無色 
+   * @returns {import("discord.js").MessageEmbedOptions}
+   */
   出力(ギルドを出力する = true, めっせーじを出力する = false, 無色 = false) {
-    return `<span${無色 ? 空文字列 : ` style="color: ${this._色}"`}><img src="${this._アイコン}" />${this._名前}${ギルドを出力する && this._ギルド名 ? `＠${this._ギルド名}` : 空文字列}${めっせーじを出力する ? `＠${this._めっせーじ}` : 空文字列}</span>`;
+    return {
+      color: 無色 ? 色名.デフォルト : this._色,
+      image: {
+        url: this._アイコン
+      },
+      title: `${this._名前}${ギルドを出力する && this._ギルド名 ? `＠${this._ギルド名}` : 空文字列}${めっせーじを出力する ? `＠${this._めっせーじ}` : 空文字列}`
+    };
   }
 }
 
@@ -125,12 +147,15 @@ export class メンバー extends ログインメンバー {
     super(サーバー, 情報);
     this.#アイテム倉庫 = new アイテム倉庫(サーバー, this);
     this.#モンスター倉庫 = new モンスター倉庫(サーバー, this);
-    this.#装備マネージャー = new キャラクター装備マネージャー(サーバー, this);
+    this.#装備マネージャー = new 装備スロットマネージャー(サーバー, this);
     this.#錬金レシピマネージャー = new プレイヤー錬金レシピマネージャー(サーバー, this);
 
     for (const [状態名, 状態] of Object.entries(情報)) {
       switch (状態名) {
         case "_ステータス":
+          /**
+           * @type {ステータス}
+           */
           this[状態名] = ステータス.オブジェクトから(状態);
           break;
         case "_所持金":
@@ -153,6 +178,9 @@ export class メンバー extends ログインメンバー {
           }
           break;
         case "_実績":
+          /**
+           * @type {実績}
+           */
           this[状態名] = new 実績(状態);
           break;
         default:
@@ -165,7 +193,7 @@ export class メンバー extends ログインメンバー {
 
   /**
    * 
-   * @param {import("./MemberJob.js").メンバーの職業} 次職 
+   * @param {import("./Job.js").職業} 次職 
    * @returns 消費アイテム名
    */
   転職(次職) {
@@ -173,9 +201,9 @@ export class メンバー extends ログインメンバー {
     this.軌跡.書き込む(`${this.現職.名前}から${次職.名前}に転職`);
     // TODO 全体の傾向に追加
     // TODO ジョブマス確認
-    const 消費アイテム名 = 次職.転職条件.消費アイテム名を取得(this);
+    const 消費アイテム名 = 次職.転職条件.消費アイテムを取得(this);
     if (消費アイテム名 !== undefined) {
-      this.装備アイテムを売る(消費アイテム名, 0);
+      this.装備.アイテムからスロットを取得(消費アイテム名).売る(消費アイテム名, 0);
     }
     this._転職回数 += 1;
     this._レベル = 1;
@@ -206,8 +234,8 @@ export class メンバー extends ログインメンバー {
   }
 
   現職SP増加(増加量) {
-    const 増加前現職SP = this._現SP;
-    this._現SP += 増加量;
+    const 増加前現職SP = this._現職.SP;
+    this._現職.SP += 増加量;
     // TODO: スキル習得ログ
   }
 
@@ -218,14 +246,14 @@ export class メンバー extends ログインメンバー {
    */
   async アイテムを使う(アイテム名) {
     const _アイテム = アイテム.一覧(アイテム名);
-    if (アイテム名 === undefined || _アイテム === undefined || !await this.倉庫に存在する(アイテム名)) {
+    if (アイテム名 === undefined || _アイテム === undefined || !await this.アイテム倉庫.にある(アイテム名)) {
       return false;
     }
     if (_アイテム.使う()) {
       if (アイテム === this.道具.名前) {
         this.道具 = undefined;
       }
-      this.倉庫から取り除く(アイテム);
+      this.アイテム倉庫.削除(アイテム名);
     }
   }
 
@@ -286,10 +314,6 @@ export class メンバー extends ログインメンバー {
     データベース操作.プレイヤーを保存(this);
   }
 
-  データベースに錬金レシピを保存(錬金レシピ) {
-    データベース操作.習得錬金レシピを保存(錬金レシピ, this._ID);
-  }
-
   /**
    * @param {import("../logger/HallOfFame.js").殿堂の名前} 種別
    */
@@ -313,7 +337,7 @@ export class メンバー extends ログインメンバー {
   場所移動(行き先) {
     this.#現在地のキャラクターから消去();
     if (行き先 instanceof 家) {
-      this._家のユーザー名 = 行き先.所有者;
+      this._家のユーザー名 = 行き先.所有者名;
     }
     this.#現在地を設定(行き先);
   }
@@ -351,28 +375,23 @@ export class メンバー extends ログインメンバー {
     this._アイコン = this.現職.アイコン名を取得(this._性別);
   }
 
+  /**
+   * @param {string} アイテム名
+   */
   装備または倉庫に送る(アイテム名, アイテム図鑑に登録する = true) {
-    this.倉庫にアイテムを送る(アイテム名, this._ID);
-    const _アイテム = アイテム.一覧(アイテム名);
-    if (!this.装備.アイテムに対応するスロットが空いている(_アイテム)) {
+    this.アイテム倉庫.追加(アイテム名);
+    const
+      _アイテム = アイテム.一覧(アイテム名),
+      スロット = this.装備.アイテムからスロットを取得(_アイテム);
+    if (!スロット.装備中) {
       return false;
     }
-    this.装備.装備(_アイテム, アイテム図鑑に登録する);
+    スロット.装着(_アイテム, アイテム図鑑に登録する);
     return true;
   }
 
-  倉庫にアイテムを送る(アイテム名) {
-    データベース操作.アイテムを入手(アイテム名, this._ID);
-    // TODO 倉庫一杯かチェック
-  }
-
-  倉庫から取り除く(アイテム名) {
-    データベース操作.アイテムを破棄(アイテム名, this._ID);
-    // TODO 倉庫一杯かチェック
-  }
-
   依頼を完了する(報酬名, ギルドポイント) {
-    this.倉庫にアイテムを送る(報酬名);
+    this.アイテム倉庫.追加(報酬名);
     if (ギルドポイント) {
       this._ギルド?.ポイント増加(ギルドポイント);
     }
@@ -388,7 +407,7 @@ export class メンバー extends ログインメンバー {
     断片.append(
       this.ステータス.ヘッダー用3ステータス出力(),
       " /",
-      this.ヘッダー用装備出力()
+      this.装備.ヘッダー用出力()
     );
     return 断片;
   }
@@ -402,13 +421,16 @@ export class メンバー extends ログインメンバー {
   }
 
   set ID(_ID) { this._ID = _ID; }
+  /**
+   * @deprecated
+   */
   set _現在地(_現在地名) { console.error("代わりに メンバー.prototype.場所移動(場所名) を使え"); }
 
   get 残り睡眠秒数() { return this._起床時刻 - 更新日時.取得(); }
   get ギルド() { return this._ギルド; }
   get 色() { return this._色; }
   get アイコン() { return this._アイコン; }
-  get _現在地() { return this.#現在地; }
+  get 現在地() { return this.#現在地; }
   get 転職回数() { return this._転職回数; }
   get 現職() { return this._現職; }
   get 前職() { return this._前職; }
@@ -454,14 +476,10 @@ export class メンバー extends ログインメンバー {
    */
   #錬金レシピマネージャー;
   /**
-   * @type {キャラクター装備マネージャー} 
+   * @type {装備スロットマネージャー} 
    */
   #装備マネージャー;
-  
-  /**
-   * @type {ステータス}
-   */
-  _ステータス;
+
   /**
    * @type {number}
    */
@@ -470,8 +488,9 @@ export class メンバー extends ログインメンバー {
    * @type {number}
    */
   _経験値;
+
   /**
-   * @type {メンバーの職業}
+   * @type {import("./MemberJob.js").メンバーの職業}
    */
   _現職;
   _前職;
@@ -486,7 +505,6 @@ export class メンバー extends ログインメンバー {
   _預かり所が空き;
   _宝を取得済み;
   _飲食済み;
-  _実績;
   _ダンジョンイベント;
   _起床時刻;
 
@@ -547,5 +565,4 @@ export class メンバー extends ログインメンバー {
     this.削除();
     return true;
   }
-
 }
