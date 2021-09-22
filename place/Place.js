@@ -95,7 +95,6 @@ export class 場所 {
       データベース操作.場所別ログを読み込む(this.ログ名, this.ログ読み込み後の処理.bind(this));
       return;
     }
-    console.trace("hoge");
     const 対象チャット = [チャット, this._NPCのチャット].filter(場所.#未定義でない要素);
     データベース操作.チャットを書き込んでから読み込む(対象チャット, this.ログ名, this.ログ読み込み後の処理.bind(this));
     this._NPCのチャット = undefined;
@@ -222,6 +221,10 @@ export class 場所 {
    */
   static #一覧生成(場所) {
     return [場所.名前, 場所];
+  }
+
+  static #未定義でない要素(要素) {
+    return 要素 !== undefined;
   }
 
   static #一覧;
