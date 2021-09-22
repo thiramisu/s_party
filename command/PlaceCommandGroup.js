@@ -11,6 +11,7 @@ export class PlaceCommandGroup {
   constructor(英語場所名, 日本語場所名) {
     this.#英語場所名 = 英語場所名;
     this.#日本語場所名 = 日本語場所名;
+    this.#コマンドリスト = [];
   }
 
   実行() {
