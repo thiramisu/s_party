@@ -1,6 +1,9 @@
+// @ts-check
 "use strict";
 
-import { サーバー } from "./Server.js"
+/**
+ * @typedef {import("./Server.js").サーバー} サーバー
+ */
 
 export class 基底 {
   /**
