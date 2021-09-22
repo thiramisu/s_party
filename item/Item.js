@@ -432,6 +432,12 @@ export class アイテム extends 取引アイテムインターフェース {
     // console.log(`アイテム総数: ${this.#一覧.size} 個(「なし」含む)`);
   }
 
+  /**
+   * 
+   * @param {string} アイテム名 
+   * @param {boolean} エラーを出す 
+   * @returns {?アイテム}
+   */
   static 一覧(アイテム名, エラーを出す = true) {
     return this.#一覧.get(アイテム名) ?? ((!エラーを出す || console.error(`アイテム「${アイテム名}」は存在しません`)) ? undefined : undefined);
   }

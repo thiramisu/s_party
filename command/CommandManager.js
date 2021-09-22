@@ -3,7 +3,8 @@
 
 import { ApplicationCommand, Interaction, Message } from "discord.js"
 import { MessageGetter } from "../MessageGetter.js"
-import { 一般的な場所 } from "../place/Place.js";
+import { 一般的な場所 } from "../place/General.js";
+import { 預かり所 } from "../place/Depot.js";
 import { 武器屋 } from "../place/WeaponShop.js";
 
 /**
@@ -203,7 +204,7 @@ const commands = [
       }
       server.プレイヤー.get(interaction.member);
     },
-    options: [武器屋, 一般的な場所].map((場所) => 場所.コマンド.オプションへ())
+    options: [預かり所, 武器屋, 一般的な場所].map((場所) => 場所.コマンド.オプションへ())
   },
   {
     name: "pskl",

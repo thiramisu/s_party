@@ -6,6 +6,8 @@
  * @typedef {import("discord.js").ThreadManager} ThreadManager
  */
 
+const メンテナンス予定分数 = 0;
+
 export const
   // "最大"-1が実際の最大なので注意(配列中のランダムな要素の取得に便利なので)
   整数乱数 = (最大, 最小 = 0, 端を含める = false) => Math.floor(Math.random() * (最大 - 最小 + (端を含める ? 1 : 0))) + 最小,
@@ -25,7 +27,7 @@ export const
   },
   空配列 = Object.freeze([]),
   空文字列 = Object.freeze(""),
-  $encode = (文字列) => 文字列.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"),
+  $encode = (/** @type {string} */ 文字列) => 文字列.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"),
   テーブル行出力 = (項目名リスト, クリック時文字列, ヘッダー行か) => {
     const tr = document.createElement("tr");
     for (const 項目名 of 項目名リスト) {
@@ -108,6 +110,10 @@ export class 範囲 {
 
 
 export class 連続 {
+  /**
+   * @param {number} 値 integer
+   * @param {number} 数 integer
+   */
   constructor(値, 数) {
     if (!Number.isInteger(数))
       throw new TypeError(`${数}は整数でなければいけません`);

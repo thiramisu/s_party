@@ -28,9 +28,15 @@ class 倉庫 extends 基底 {
   /**
    * 
    * @param {string} アイテム名 
+   * @returns {boolean} 削除に成功したなら`true`
    */
   削除(アイテム名) {
+    const 添え字 = this.#内容.indexOf(アイテム名);
+    if (添え字 === -1) {
+      return false;
+    }
     this.#内容.splice(this.#内容.indexOf(アイテム名), 1);
+    return true;
   }
 
   引き出す() {
@@ -42,7 +48,7 @@ class 倉庫 extends 基底 {
   }
 
   は満杯() {
-    return Math.min(最大アイテム預かり個数, アイテム預かり個数の計算式(this.#プレイヤー.転職回数));
+    return this.#内容.length >= this.最大;
   }
 
   /**
@@ -58,7 +64,7 @@ class 倉庫 extends 基底 {
    * 最大
    * @interface
    */
-  get 最大() { return 0; }
+  get 最大() { return Math.min(最大アイテム預かり個数, アイテム預かり個数の計算式(this.#プレイヤー.転職回数)); }
   get プレイヤー() { return this.#プレイヤー; }
 
   #プレイヤー;

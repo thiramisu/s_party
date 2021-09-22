@@ -32,8 +32,8 @@ export class PlaceActionCommand {
    * @param {string} 英語名
    * @param {string} 日本語名
    * @param {boolean} 必須か
-   * @param {Map<string, string>} [候補] 日本語名 => 英語名。タイプが`"NUMBER"`,`"STRING"`,`"INTEGER"`の時のみ。
-   * @returns {PlaceActionCommand} this
+   * @param {Map<string, string|number>} [候補] 日本語名 => 英語名。タイプが`"NUMBER"`,`"STRING"`,`"INTEGER"`の時のみ。
+   * @returns {this} this
    */
   引数追加(タイプ, 英語名, 日本語名, 必須か, 候補) {
     this.#引数.push({

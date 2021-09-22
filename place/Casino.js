@@ -6,12 +6,20 @@ import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
 import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { ランダムな1要素 } from "../Util.js";
 
+/**
+ * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ */
+
+const カジノコイン1枚に対する必要ゴールド = 20;
 
 export class カジノ extends 一般的な場所 {
   constructor() {
     super("casino.gif", 場所._訪問方法.いどう, new キャラクター("@ﾊﾞﾆｰ", "chr/020.gif"));
   }
 
+  /**
+   * @param {プレイヤー} プレイヤー
+   */
   ヘッダー出力(プレイヤー) {
     const 断片 = document.createDocumentFragment();
     断片.append(
@@ -28,7 +36,7 @@ export class カジノ extends 一般的な場所 {
 
   _はなす() {
     super._はなす(
-      "コインは１枚20Gです☆",
+      `コインは１枚${カジノコイン1枚に対する必要ゴールド}Gです☆`,
       "ゴールドをコインに両替してね☆",
       "賞品は他ではなかなか手に入れることができないレアなアイテムばかりよ☆",
       "スロットの絵柄を３つそろえるとコインが増えて幸せになれるわよ☆",
@@ -40,7 +48,35 @@ export class カジノ extends 一般的な場所 {
     super._NPCをしらべる(`${this._NPC.名前}「きゃぁッ☆エッチィ～☆」`);
   }
 
-  #スロット(プレイヤー, 賭けた枚数) {
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  つくる(プレイヤー) {
+
+  }
+
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  さんか(プレイヤー) {
+
+  }
+
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  けんがく(プレイヤー) {
+
+  }
+
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  すろっと(プレイヤー, 賭けた枚数) {
     if (プレイヤー.疲労確認()) {
       return;
     }
@@ -83,20 +119,46 @@ export class カジノ extends 一般的な場所 {
     プレイヤー.カジノコイン.収支(払い戻し);
     通知欄.追加(通知内容, `＠＄${賭けた枚数}すろっと`);
   }
-  
+
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  こうかん(プレイヤー) {
+
+  }
+
+  /**
+   * 
+   * @param {プレイヤー} プレイヤー 
+   */
+  りょうがえ(プレイヤー, 両替枚数) {
+    if (両替枚数 === undefined || 両替枚数 < 1) {
+      通知欄.追加(`コイン１枚 ${カジノコイン1枚に対する必要ゴールド} Gです。いくら両替しますか？`, "＠りょうがえ>");
+      return;
+    }
+    const 必要枚数 = 両替枚数 * カジノコイン1枚に対する必要ゴールド
+    if (!プレイヤー.所持金.収支(-必要枚数)) {
+      通知欄.追加(`ゴールドが足りません。コイン$target枚を両替するには ${必要枚数} G必要です`);
+      return;
+    }
+    プレイヤー.カジノコイン.収支(両替枚数);
+    this.NPCに話させる("$target枚のコインと両替しました");
+  }
+
   static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
 
   static #コマンドを登録() {
     this.#コマンド = new PlaceCommandGroup("casino", "カジノ");
     this.#コマンド.追加(
-      new PlaceActionCommand("order", this.prototype.つくる),
-      new PlaceActionCommand("order", this.prototype.さんか),
-      new PlaceActionCommand("order", this.prototype.けんがく),
-      new PlaceActionCommand("order", this.prototype.＄1すろっと),
-      new PlaceActionCommand("order", this.prototype.＄10すろっと),
-      new PlaceActionCommand("order", this.prototype.＄100すろっと),
-      new PlaceActionCommand("order", this.prototype.こうかん),
-      new PlaceActionCommand("order", this.prototype.りょうがえ)
+      new PlaceActionCommand("create", this.prototype.つくる),
+      new PlaceActionCommand("join", this.prototype.さんか),
+      new PlaceActionCommand("spect", this.prototype.けんがく),
+      new PlaceActionCommand("slot", this.prototype.すろっと)
+        .引数追加("INTEGER", "bet", "掛け金", true, new Map([["＄1", 1], ["＄10", 10], ["＄100", 100]])),
+      new PlaceActionCommand("prize", this.prototype.こうかん),
+      new PlaceActionCommand("exchange", this.prototype.りょうがえ)
+        .引数追加("INTEGER", "coins", "枚数", false)
     );
     return this.#コマンド;
   }
