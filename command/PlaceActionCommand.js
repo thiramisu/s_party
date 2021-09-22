@@ -43,7 +43,7 @@ export class PlaceActionCommand {
       name: 英語名,
       description: 日本語名,
       required: 必須か,
-      choices: Array.from(候補).map(this.#選択肢へ)
+      choices: 候補 === undefined ? undefined : Array.from(候補).map(this.#選択肢へ)
     });
     return this;
   }
