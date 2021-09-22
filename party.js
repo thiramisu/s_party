@@ -17,6 +17,9 @@ const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
 })
 const serverManager = new ServerManager();
+/**
+ * @type {Map<import("discord-api-types").Snowflake, GuildCommandManager>}
+ */
 const guildCommandManagers = new Map();
 
 client.on('guildCreate', async guild => {
@@ -38,7 +41,7 @@ client.once('ready', onceReady)
 client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
     const サーバー = await serverManager.取得(interaction.guild);
-    guildCommandManagers.get(interaction.guildId).onInteraction(interaction, サーバー);
+    await guildCommandManagers.get(interaction.guildId).onInteraction(interaction, サーバー);
     /*
     (await サーバー.殿堂.取得(殿堂の名前.職業)).プレイヤー追加({
       名前: "hoge",
