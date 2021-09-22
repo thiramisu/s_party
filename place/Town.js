@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 
-import { 一般的な場所 } from "./Place.js"
+import { 一般的な場所 } from "./General.js"
 
 export class 町 extends 一般的な場所 {
   constructor(名前, 背景画像, 最大建築数, 家のアイコンリスト, 家の値段, 家の所有日数) {

@@ -5,7 +5,7 @@ import { メンバー } from "../character/Character.js";
 import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
 import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { アイテム } from "../item/Item.js";
-import { 一般的な場所 } from "./Place.js"
+import { 一般的な場所 } from "./General.js"
 import { 通貨 } from "../Currency.js"
 
 export class 店インターフェース extends 一般的な場所 {

@@ -1,7 +1,8 @@
 // @ts-check
 "use strict";
 
-import { 一般的な場所 } from "./Place.js"
+import { 一般的な場所 } from "./General.js"
+import { 場所 } from "./Place.js";
 
 export class 冒険に出る extends 一般的な場所 {
   constructor() {
