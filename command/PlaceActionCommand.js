@@ -1,7 +1,9 @@
 // @ts-check
 "use strict";
 
-import { メンバー } from "../character/Character.js"
+/**
+ * @typedef {import("../character/Character.js").メンバー} メンバー
+ */
 
 export class PlaceActionCommand {
   /**
@@ -61,13 +63,13 @@ export class PlaceActionCommand {
 
   /**
    * 
-   * @param {[string, string]} param0 
+   * @param {[string, string|number]} param0 
    * @returns {import("discord.js").ApplicationCommandOptionChoice}
    */
   #選択肢へ([日本語名, 英語名]) {
     return {
-      name: 英語名,
-      value: 日本語名
+      name: 日本語名,
+      value: 英語名
     };
   }
 
