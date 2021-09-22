@@ -1,9 +1,10 @@
 // @ts-check
 "use strict";
 
-import { 基底 } from "../Base.js";
 import { メンバー } from "./Character.js";
+import { 転職可能な職業 } from "./Job.js";
 import { ステータス } from "./Status.js";
+import { 基底 } from "../Base.js";
 import { 色名 } from "../config.js";
 import { Spreadsheet } from "../SpreadSheet.js";
 import { 整数乱数, 空文字列 } from "../Util.js";
@@ -15,6 +16,9 @@ import { 整数乱数, 空文字列 } from "../Util.js";
 const プレイヤー一覧の更新周期日数 = Infinity;
 
 export class プレイヤーマネージャー extends 基底 {
+  /**
+   * @param {import("../Server.js").サーバー} サーバー
+   */
   constructor(サーバー) {
     super(サーバー);
     this.#一覧 = new Map();
@@ -46,7 +50,7 @@ export class プレイヤーマネージャー extends 基底 {
           _所持: 200
         },
         _色: "#FFFFFF",
-        _性別,
+        _性別: _性別 === "f" ? "女" : "男",
         _現在地名: "交流広場",
         _転職回数: 0,
         _レベル: 1,
@@ -54,11 +58,8 @@ export class プレイヤーマネージャー extends 基底 {
         _ステータス
       }),
       名前 = サーバーメンバー.displayName;
-      this.サーバー.登録者数.増減(1);
     this.サーバー.ニュース.書き込む(`${名前} という冒険者が参加しました`, 色名.強調);
-    画面.一覧("トップ画面").新規登録完了表示(名前, _職業名, _性別, _ステータス);
-    データベース操作.新規プレイヤー登録(_メンバー);
-    _メンバー.軌跡.書き込む(`冒険者 ${名前} 誕生！`, "部分強調");
+    _メンバー.軌跡.書き込む(`冒険者 ${名前} 誕生！`, 色名.強調); // 部分強調
     return _メンバー;
   }
 
@@ -114,14 +115,14 @@ export class プレイヤーマネージャー extends 基底 {
     //*/
     実績.ランキング出力();
     this.サーバー.プレイヤー一覧.書き込む(tBody);
-    セーブデータ.プレイヤー一覧更新日時.保存(現在日時);
+    this.サーバー.プレイヤー一覧更新日時.保存(現在日時);
   }
 
   #登録チェック(職業名, 性別) {
     try {
       if (性別 === 空文字列)
         throw "性別が入力されていません";
-      if (性別 !== "男" && 性別 !== "女")
+      if (性別 !== "f" && 性別 !== "m")
         throw "性別が異常です";
 
       if (!初期職業.has(職業名))

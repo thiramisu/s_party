@@ -1,8 +1,8 @@
 // @ts-check
 "use strict";
 
-import { 空文字列 } from "../Util.js";
 import { 陳列可能インターフェース } from "./ItemInterface.js";
+import { 空文字列 } from "../Util.js";
 
 /**
  * @typedef {import("../character/Character.js").メンバー} プレイヤー

@@ -429,6 +429,7 @@ export class メンバー extends ログインメンバー {
   get 残り睡眠秒数() { return this._起床時刻 - 更新日時.取得(); }
   get ギルド() { return this._ギルド; }
   get 色() { return this._色; }
+  get 性別() { return this._性別; }
   get アイコン() { return this._アイコン; }
   get 現在地() { return this.#現在地; }
   get 転職回数() { return this._転職回数; }
@@ -455,7 +456,7 @@ export class メンバー extends ログインメンバー {
     return new メンバー(サーバー, JSON);
   }
 
-  JSONへ() {
+  toJSON() {
     
   }
 

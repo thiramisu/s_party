@@ -1,6 +1,10 @@
 // @ts-check
 "use strict";
 
+import { アイテム } from "./Item.js";
+import { 陳列可能インターフェース } from "./ItemInterface.js";
+import { ランダムな1要素, 整数乱数, 確率, 範囲, 連続 } from "../Util.js";
+
 class 何でも屋の依頼 extends 陳列可能インターフェース {
   constructor(ID, 名前, 期限, 納品名, 納品数, 報酬名, 魔物依頼, ギルド依頼) {
     super(名前);
@@ -42,10 +46,15 @@ class 何でも屋の依頼 extends 陳列可能インターフェース {
     return `『${this.名前}』は誰も解決できそうにないので、新しい依頼がきました！<br>`;
   }
 
-  解決() {
-    if (this.#解決チェック())
+  /**
+   * 
+   * @param {import("../character/Character.js").メンバー} プレイヤー 
+   * @returns 
+   */
+  解決(プレイヤー) {
+    if (this.#解決チェック(プレイヤー))
       return undefined;
-    あなた.依頼を完了する(this._報酬名, 100);
+    プレイヤー.依頼を完了する(this._報酬名, 100);
     何でも屋の依頼.新規登録(this._ID);
     return `${this.#必要アイテム文字列取得()} たしかに受け取りました。こちらが報酬の ${this._報酬名} になります！${あなた}さんの預り所に送っておきますね！`;
   }
@@ -125,11 +134,16 @@ class 何でも屋の依頼 extends 陳列可能インターフェース {
 
   static _陳列用ヘッダー項目名リスト = ["依頼名", "クリア条件", "報酬", "期限"];
 
-  #解決チェック() {
+  /**
+   * 
+   * @param {import("../character/Character.js").メンバー} プレイヤー 
+   * @returns 
+   */
+  #解決チェック(プレイヤー) {
     try {
-      if (this._ギルド依頼 && !あなた.メンバー.ギルド === undefined)
+      if (this._ギルド依頼 && !プレイヤー.ギルド === undefined)
         throw `${this.名前}はギルド専用のクエストよ。ギルドに加入していないと依頼を受けることができないわ`;
-      if (this._魔物依頼 ? モンスター倉庫.画像から削除(this._納品名, this._納品数) : アイテム倉庫.削除(this._納品名, this._納品数))
+      if (this._魔物依頼 ? プレイヤー.モンスター倉庫.画像から削除(this._納品名, this._納品数) : プレイヤー.アイテム倉庫.削除(this._納品名, this._納品数))
         throw `${this.#必要アイテム文字列取得()} の条件を満たしてないようです`;
     }
     catch (エラー) {

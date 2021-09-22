@@ -40,6 +40,7 @@ client.once('ready', onceReady)
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
+    interaction.channel.sendTyping();
     const サーバー = await serverManager.取得(interaction.guild);
     await guildCommandManagers.get(interaction.guildId).onInteraction(interaction, サーバー);
     /*

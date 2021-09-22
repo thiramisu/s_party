@@ -376,12 +376,17 @@ export class 戦闘メンバー extends キャラクター {
 
   get 名前() { return this.名前; }
   get ステータス() { return this._ステータス; }
+  get 現在地() { return this.#現在地; }
 
   _ステータス;
   _命中率;
 
   #現職;
   #前職;
+  /**
+   * @type {import("../place/Battle.js").戦闘}
+   */
+  #現在地;
 
   static #NPCかどうか = new RegExp(/^@/);
   static #宝箱かどうか = new RegExp(/^@.+宝箱.$/);

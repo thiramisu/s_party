@@ -1,6 +1,10 @@
 // @ts-check
 "use strict";
 
+import { ステータス, 成長率 } from "./Status.js";
+import { 属性 } from "../battle/SkillAttribute.js";
+import { ランダムな1要素, 空配列 } from "../Util.js";
+
 export class 職業 {
   constructor(スキルリスト) {
     this.#名前 = this.constructor.name;

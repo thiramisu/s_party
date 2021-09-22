@@ -1,7 +1,10 @@
 // @ts-check
 "use strict";
 
-class テンション {
+import { 属性 } from "./SkillAttribute.js";
+import { 確率 } from "../Util.js";
+
+export class テンション {
   constructor(名前, 倍率, パーセント, 表示正式名) {
     this.#名前 = 名前;
     this.#倍率 = 倍率;
@@ -55,7 +58,7 @@ class テンション {
   static #自動ID = 0;
 }
 
-class 状態異常 {
+export class 状態異常 {
   constructor(名前) {
     this.#名前 = 名前;
   }
@@ -77,7 +80,7 @@ class 状態異常 {
         (メンバー名) => `${メンバー名}は眠っている！`,
         (メンバー名) => `${メンバー名}は眠りからさめました！`),
       [...属性.全て()].map((属性) => new 属性封印(属性))
-    ]).map((状態異常) => [状態異常.名前, 状態異常]);
+    ].map((状態異常) => [状態異常.名前, 状態異常]));
   }
 
   #名前;
@@ -154,7 +157,7 @@ class 属性封印 extends 状態異常 {
     if (技.属性 !== this.#属性) {
       return;
     }
-    if (rand(4) < 1) {
+    if (確率(1 / 4)) {
       あなた.チャット書き込み予約(クラス付きテキスト("heal", `${技.使用者}は${技.属性.使用可能の文章}ようになりました！`));
       技.使用者.状態異常を解除();
       return;
@@ -166,7 +169,12 @@ class 属性封印 extends 状態異常 {
   #属性;
 }
 
-class 一時的状態 {
+export class 一時的状態 {
+  /**
+   * @param {string} 名前
+   * @param {number} 解除確率
+   * @param {string} 付与時の表示文章
+   */
   constructor(名前, 解除確率, 付与時の表示文章) {
     this._名前 = 名前;
     this.#解除確率 = 解除確率;
@@ -175,7 +183,7 @@ class 一時的状態 {
 
   付与時の文章を表示(戦闘メンバー) {
     return this.#付与時の表示文章 === undefined ? undefined
-      : クラス付きテキスト("tmp", `${this.戦闘メンバー.名前}${this.#付与時の表示文章}`);
+      : クラス付きテキスト("tmp", `${戦闘メンバー.名前}${this.#付与時の表示文章}`);
   }
 
   解除チェック() {
@@ -239,7 +247,7 @@ class 復活 extends 一時的状態 {
 
 class 防御 extends 一時的状態 {
   constructor(名前, 係数, 付与時の表示文章) {
-    super(名前, 付与時の表示文章);
+    super(名前, 1, 付与時の表示文章);
     this.#係数 = 係数;
   }
 
@@ -271,6 +279,9 @@ class かばう extends 一時的状態 {
 }
 
 class 受流し extends 一時的状態 {
+  /**
+   * @param {string} 付与時の表示文章
+   */
   constructor(付与時の表示文章) {
     // TODO デフォルトに忠実: 半角スペース入れるか入れないか
     super("受流し", 1 / 3, 付与時の表示文章);
@@ -288,6 +299,9 @@ class 受流し extends 一時的状態 {
 }
 
 class 魔吸収 extends 一時的状態 {
+  /**
+   * @param {string} 付与時の表示文章
+   */
   constructor(付与時の表示文章) {
     super("魔吸収", 1 / 3, 付与時の表示文章);
   }
@@ -307,8 +321,12 @@ class 魔吸収 extends 一時的状態 {
 }
 
 class 属性反撃 extends 一時的状態 {
-  constructor(属性) {
-    super(`${属性.短縮名}反撃`, 1);
+  /**
+   * @param {属性} 属性
+   * @param {string} 付与時の表示文章
+   */
+  constructor(属性, 付与時の表示文章) {
+    super(`${属性.短縮名}反撃`, 1, 付与時の表示文章);
     this.#属性 = 属性;
   }
 
@@ -324,6 +342,10 @@ class 属性反撃 extends 一時的状態 {
 }
 
 class 属性無効 extends 一時的状態 {
+  /**
+   * @param {属性} 属性
+   * @param {string} 文章表示関数
+   */
   constructor(属性, 文章表示関数) {
     super(`${属性.短縮名}無効`, 1 / 3, 文章表示関数);
     this.#属性 = 属性;
@@ -341,6 +363,10 @@ class 属性無効 extends 一時的状態 {
 }
 
 class 属性軽減 extends 一時的状態 {
+  /**
+   * @param {属性} 属性
+   * @param {string} 文章表示関数 TODO
+   */
   constructor(属性, 文章表示関数) {
     super(`${属性.短縮名}軽減`, 1 / 3, 文章表示関数);
     this.#属性 = 属性;

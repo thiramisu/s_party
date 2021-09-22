@@ -4,6 +4,10 @@
 import { 陳列可能インターフェース } from "./ItemInterface.js"
 
 export class 壁紙 extends 陳列可能インターフェース {
+  /**
+   * @param {string} 画像
+   * @param {number} 価値
+   */
   constructor(画像, 価値) {
     super(画像.match(壁紙.#拡張子を除く)[0]);
     this.#画像 = 画像;
@@ -98,13 +102,20 @@ export class 壁紙 extends 陳列可能インターフェース {
     ].sort((壁紙1, 壁紙2) => 壁紙1.#価値 - 壁紙2.#価値).map((壁紙) => [壁紙.名前, 壁紙]));
   }
 
+  /**
+   * @param {string} 画像名
+   * @returns {?壁紙}
+   */
   static 一覧(画像名, エラーを出す = true) {
-    return this.#一覧.get(画像名) ?? ((!エラーを出す || console.error(`壁紙「${画像名}」は存在しません`)) ? undefined : undefined);
+    return this.#一覧.get(画像名) ?? ((!エラーを出す || console.error(`壁紙「${画像名}」は存在しません`)) ? null : null);
   }
 
   #画像;
   #価値;
 
+  /**
+   * @type {Map<string, 壁紙>}
+   */
   static #一覧;
   static #拡張子を除く = new RegExp(/.+(?=[.].+)/);
 }

@@ -108,10 +108,12 @@ export class 範囲 {
   #段階数;
 }
 
-
+/**
+ * @template T
+ */
 export class 連続 {
   /**
-   * @param {number} 値 integer
+   * @param {T} 値
    * @param {number} 数 integer
    */
   constructor(値, 数) {
@@ -121,6 +123,9 @@ export class 連続 {
     this.#数 = 数;
   }
 
+  /**
+   * @returns {IterableIterator<T>}
+   */
   *[Symbol.iterator]() {
     for (let i = 0; i < this.#数; i += 1) {
       yield this.#値;

@@ -1,6 +1,8 @@
 // @ts-check
 "use strict";
 
+import { 整数乱数 } from "../Util.js";
+
 export class 簡易ステータス {
   constructor(ＨＰ = 0, ＭＰ = 0, 攻撃力 = 0, 守備力 = 0, 素早さ = 0) {
     this.#ＨＰ = ＨＰ;
@@ -165,7 +167,7 @@ export class 個別ステータス {
     this._基礎値 = Math.min(Math.trunc(基礎値), 上限値);
   }
 
-  現在値を設定(現在値, 上限値 = this._値 * this.#ステータスの種類.現在値上限係数) {
+  現在値を設定(現在値, 上限値 = this._基礎値 * this.#ステータスの種類.現在値上限係数) {
     this._現在値 = Math.min(Math.trunc(現在値), 上限値);
   }
 
@@ -186,14 +188,14 @@ export class 個別ステータス {
 export class 成長率 extends ステータス {
   成長結果一括取得(レベル) {
     const 成長 = new ステータス();
-    for (const i = 0; i < レベル; i += 1) {
+    for (let i = 0; i < レベル; i += 1) {
       成長.増加(this.成長取得(), false);
     }
     return 成長;
   }
 
   成長結果取得() {
-    return 成長結果取得(this);
+    return 成長率.成長結果取得(this);
   }
 
   static 成長結果取得(最大成長値) {

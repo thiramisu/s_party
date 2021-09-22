@@ -1,6 +1,12 @@
 // @ts-check
 "use strict";
 
+import { 冒険場所の情報 } from "./BattleData.js";
+import { 敵情報 } from "./EnemyData.js";
+import { アイテム } from "../item/Item.js";
+import { ステータス } from "../character/Status.js";
+import { 空配列, 連続 } from "../Util.js";
+
 class クエスト情報 extends 冒険場所の情報 {
   static 初期化() {
     new クエスト情報("プニプニ平原", "stage0.gif", [

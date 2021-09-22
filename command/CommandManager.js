@@ -6,6 +6,7 @@ import { MessageGetter } from "../MessageGetter.js"
 import { 一般的な場所 } from "../place/General.js";
 import { 預かり所 } from "../place/Depot.js";
 import { 武器屋 } from "../place/WeaponShop.js";
+import { メンバー } from "../character/Character.js"
 
 /**
  * @typedef {import("discord.js").ThreadManager} ThreadManager
@@ -14,72 +15,30 @@ import { 武器屋 } from "../place/WeaponShop.js";
  * @typedef {import("discord.js").ApplicationCommandOptionData}  ApplicationCommandOptionData
  */
 
-/**
- * 範囲内(または0~最大)の整数の乱数を返す
- * @param {number} max
- * @param {number} [min]
- * @param {Boolean} [isIncluded] 端を含めるか
- * @returns {Number}
- */
-const integerRandom = (max, min = 0, isIncluded = false) =>
-  Math.floor(Math.random() * (max - min + (isIncluded ? 1 : 0))) + min
-
-/**
- * 名前からスレッド取得、無ければ作成
- * @param {ThreadManager} threads
- * @param {String} name
- * @param {String} [reason]
- * @returns {Promise<ThreadChannel>}
- */
-const getOrCreateThreadByName = async (threads, name, reason) => {
-  for (const thread of (await threads.fetchArchived()).threads.values()) {
-    if (thread.name === name) {
-      await thread.setArchived(false);
-      return thread;
-    }
-  }
-  for (const thread of (await threads.fetch()).threads.values()) {
-    console.log("1" + thread.name);
-    if (thread.name === name) {
-      return thread;
-    }
-  }
-  const thread = await threads.create({
-    name: name,
-    autoArchiveDuration: 60,
-    reason: reason
-  })
-  return thread;
-}
-
 const commands = [
   {
     name: 'party',
     description: 'humu',
-    exec: async interaction => {
+    /**
+     * 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("../Server.js").サーバー} server 
+     * @returns 
+     */
+    exec: async (interaction, server) => {
       const options = interaction.options;
       switch (options.getSubcommand(true)) {
         case 'new-entry':
+          const member = /** @type {import("discord.js").GuildMember} */(interaction.member);
+          const 新メンバー = server.プレイヤー.新規登録(
+            member,
+            options.getString("sex"),
+            options.getString("job")
+          );
           const channel = interaction.channel;
-          interaction.reply(
-            MessageGetter.newEntry(
-              interaction.member.displayName,
-              options.getString('sex'),
-              options.getString('job'),
-              integerRandom(32, 30, true),
-              integerRandom(8, 6, true),
-              integerRandom(8, 6, true),
-              integerRandom(8, 6, true),
-              integerRandom(8, 6, true),
-            ),
-          );
-          const thread = await getOrCreateThreadByName(
-            // スレッド内でコマンドが使われた時はchannel.threadsが使えないので
-            channel.threads ?? channel.parent.threads,
-            'food-talk',
-            'テスト',
-          );
-          await thread.members.add(interaction.member);
+          interaction.reply(MessageGetter.newEntry(新メンバー));
+          const thread = server.hoge; // TODO
+          await thread.members.add(member);
           await thread.send("チュートリアル予定地");
           break;
         case 'wiki':
@@ -206,7 +165,7 @@ const commands = [
     exec: async (interaction, server) => {
       const プレイヤー = await server.プレイヤー.取得(interaction.member.user.id, true);
       if (プレイヤー === null) {
-        interaction.reply("まずは/party new-entryから新規登録をしてください");
+        interaction.reply("まずは`/party new-entry`から新規登録をしてください");
         return;
       }
       console.log("工事中");
