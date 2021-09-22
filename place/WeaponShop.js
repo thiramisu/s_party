@@ -47,7 +47,7 @@ export class 武器屋 extends 専門店 {
    * @param {プレイヤー} プレイヤー
    * @param {string} 対象
    */
-  #うる(プレイヤー, 対象) {
+  うる(プレイヤー, 対象) {
     super._うる(プレイヤー, 対象, プレイヤー.装備.武器);
   }
 
@@ -86,7 +86,7 @@ export class 武器屋 extends 専門店 {
     this.#コマンド.追加(
       new PlaceActionCommand("buy", this.prototype._かう)
         .引数追加("STRING", "weapon", "武器", false),
-      new PlaceActionCommand("sell", this.prototype.#うる)
+      new PlaceActionCommand("sell", this.prototype.うる)
     );
     return this.#コマンド;
   }
