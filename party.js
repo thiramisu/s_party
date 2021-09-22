@@ -38,7 +38,7 @@ client.once('ready', onceReady)
 client.on('interactionCreate', async interaction => {
   if (interaction.isCommand()) {
     const サーバー = await serverManager.取得(interaction.guild);
-    guildCommandManagers.get(interaction.guildId).onInteraction(interaction);
+    guildCommandManagers.get(interaction.guildId).onInteraction(interaction, サーバー);
     /*
     (await サーバー.殿堂.取得(殿堂の名前.職業)).プレイヤー追加({
       名前: "hoge",

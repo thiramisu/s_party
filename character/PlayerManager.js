@@ -5,14 +5,19 @@ import { 基底 } from "../Base.js";
 import { メンバー } from "./Character.js";
 import { ステータス } from "./Status.js";
 import { 色名 } from "../config.js";
-import { 整数乱数 } from "../Util.js";
+import { Spreadsheet } from "../SpreadSheet.js";
+import { 整数乱数, 空文字列 } from "../Util.js";
+
+/**
+ * @typedef {import("discord.js").Snowflake} プレイヤーID
+ */
 
 const プレイヤー一覧の更新周期日数 = Infinity;
 
 export class プレイヤーマネージャー extends 基底 {
   constructor(サーバー) {
     super(サーバー);
-    this.#一覧 = new Set();
+    this.#一覧 = new Map();
   }
 
   /**
@@ -49,12 +54,34 @@ export class プレイヤーマネージャー extends 基底 {
         _ステータス
       }),
       名前 = サーバーメンバー.displayName;
-    セーブデータ.登録者数.増減(1);
+      this.サーバー.登録者数.増減(1);
     this.サーバー.ニュース.書き込む(`${名前} という冒険者が参加しました`, 色名.強調);
     画面.一覧("トップ画面").新規登録完了表示(名前, _職業名, _性別, _ステータス);
     データベース操作.新規プレイヤー登録(_メンバー);
     _メンバー.軌跡.書き込む(`冒険者 ${名前} 誕生！`, "部分強調");
     return _メンバー;
+  }
+
+  /**
+   * 
+   * @param {プレイヤーID} プレイヤーID 
+   * @returns {Promise<?メンバー>} 取得できなかったなら`null`
+   */
+  async 取得(プレイヤーID, サーバーから取得する = false) {
+    if (this.#一覧.has(プレイヤーID)) {
+      return this.#一覧.get(プレイヤーID);
+    }
+    if (!サーバーから取得する) {
+      return null;
+    }
+    const json = await Spreadsheet.searchPlayer(this.サーバー.guild.id, プレイヤーID);
+    if (typeof json !== "string") {
+      this.#一覧.set(プレイヤーID, null);
+      return null;
+    }
+    const 追加メンバー = メンバー.JSONから(this.サーバー, json);
+    this.#一覧.set(プレイヤーID, 追加メンバー);
+    return 追加メンバー;
   }
 
   保存(プレイヤー) {
@@ -109,5 +136,8 @@ export class プレイヤーマネージャー extends 基底 {
     return false;
   }
 
+  /**
+   * @type {Map<プレイヤーID, ?メンバー>}
+   */
   #一覧;
 }

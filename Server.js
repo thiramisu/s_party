@@ -44,7 +44,7 @@ export const チャンネル名 = Object.freeze({
 });
 
 /**
- * @typedef {Map<チャンネル名, CategoryChannel | TextChannel>} サーバーチャンネル チャンネル名とチャンネルの対応
+ * @typedef {Map<チャンネル名, GuildChannel>} サーバーチャンネル チャンネル名とチャンネルの対応
  * @property {CategoryChannel} メインカテゴリー
  * @property {TextChannel} ニュース
  * @property {TextChannel} フォトコン
@@ -77,6 +77,8 @@ export class サーバー {
     this.#職業ランキング = new 職業ランキング(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
   }
 
+  get guild() { return this.#guild; }
+  
   get プレイヤー() { return this.#プレイヤーマネージャー }
   get ギルド() { return this.#ギルドマネージャー; }
 

@@ -450,6 +450,15 @@ export class メンバー extends ログインメンバー {
     データベース操作.プレイヤーを読み込む(名前, コールバック);
   }
 
+  static JSONから(サーバー, json) {
+    const データ = JSON.parse(json);
+    return new メンバー(サーバー, JSON);
+  }
+
+  JSONへ() {
+    
+  }
+
   _ID;
   _ギルド;
   _性別;

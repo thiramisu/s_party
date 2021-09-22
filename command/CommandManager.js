@@ -197,12 +197,19 @@ const commands = [
   {
     name: "pact",
     description: "行動",
+    /**
+     * 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("../Server.js").サーバー} server 
+     * @returns 
+     */
     exec: async (interaction, server) => {
-      if (!ユーザー認証(interaction.guild, interaction.member)) {
+      const プレイヤー = await server.プレイヤー.取得(interaction.member.user.id, true);
+      if (プレイヤー === null) {
         interaction.reply("まずは/party new-entryから新規登録をしてください");
         return;
       }
-      server.プレイヤー.get(interaction.member);
+      console.log("工事中");
     },
     options: [預かり所, 武器屋, 一般的な場所].map((場所) => 場所.コマンド.オプションへ())
   },
@@ -222,11 +229,11 @@ export class GuildCommandManager {
     return await this.commands.set(commands);
   }
   /**
-   *
    * @param {CommandInteraction} interaction
+   * @param {import("../Server.js").サーバー} server
    */
-  async onInteraction(interaction) {
-    await commandList.get(interaction.commandName)?.exec(interaction);
+  async onInteraction(interaction, server) {
+    await commandList.get(interaction.commandName)?.exec(interaction, server);
   }
 }
 
