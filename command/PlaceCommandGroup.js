@@ -28,9 +28,13 @@ export class PlaceCommandGroup {
     return this;
   }
 
+  /**
+   * 
+   * @returns {import("discord.js").ApplicationCommandSubGroupData}
+   */
   オプションへ() {
     return {
-      type: "SUB_COMMAND",
+      type: "SUB_COMMAND_GROUP",
       name: this.#英語場所名,
       description: this.#日本語場所名,
       options: this.#コマンドリスト.map(this.#コマンドリストをオプションリストへ)
