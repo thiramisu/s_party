@@ -3,6 +3,7 @@
 
 import { MessageEmbed } from "discord.js"
 import { 基底 } from "../Base.js"
+import { 色名 } from "../config.js";
 
 /**
  * @typedef {import("../Server.js").サーバー} サーバー
@@ -14,11 +15,6 @@ import { 基底 } from "../Base.js"
  * discord の API で1メッセージあたりに含められるEmbedの最大数
  */
 const MAX_EMBED_COUNT_PER_MESSAGE = 10;
-
-/**
- * 
- */
-const DEFAULT_LOG_COLOR = "#FFFFFF";
 
 export class ログ書き込み君 extends 基底 {
   /**
@@ -48,7 +44,7 @@ export class ログ書き込み君 extends 基底 {
    * @param {string} 内容 
    * @param {ColorResolvable} 色 
    */
-  async 書き込む(内容, 色 = DEFAULT_LOG_COLOR) {
+  async 書き込む(内容, 色 = 色名.デフォルト) {
     await this.#チャンネル.send({
       embeds: [
         new MessageEmbed({

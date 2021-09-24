@@ -7,11 +7,13 @@ export class 通貨 {
     this._所持 = 所持;
   }
 
-  収支(_金額, 強制 = false) {
-    const 金額 = parseInt(_金額);
-    if (Number.isNaN(金額)) {
-      throw new TypeError(`${_金額}が数値に変換できませんでした`);
-    }
+  /**
+   * 
+   * @param {number} 金額 
+   * @param {boolean} 強制 trueなら足りない場合0になる
+   * @returns {boolean} 足りないならfalse
+   */
+  収支(金額, 強制 = false) {
     if (金額 < 0 && this._所持 + 金額 < 0) {
       if (強制) {
         this._所持 = 0;

@@ -10,12 +10,41 @@ import { チャレンジ記録 } from "./logger/ChallengeRecord.js"
 import { プレイヤー一覧 } from "./logger/PlayerList.js"
 import { ログ書き込み君 } from "./logger/Logger.js"
 
+import { 冒険に出る } from "./place/Quest.js";
+import { カジノ } from "./place/Casino.js";
+import { 預かり所 } from "./place/Depot.js";
+import { 武器屋 } from "./place/WeaponShop.js";
+import { 防具屋 } from "./place/ArmorShop.js";
+import { 道具屋 } from "./place/ItemShop.js";
+import { 秘密の店 } from "./place/SecretShop.js";
+import { ルイーダの酒場 } from "./place/Bar.js";
+import { 福引所 } from "./place/Lot.js";
+import { モンスターじいさん } from "./place/MonsterDepot.js";
+import { フォトコン会場 } from "./place/PhotoContest.js";
+import { オラクル屋 } from "./place/Oracle.js";
+import { 闇市場 } from "./place/BlackMarket.js";
+import { メダル王の城 } from "./place/MedalCastle.js";
+import { ダーマ神殿 } from "./place/Temple.js";
+import { 交流広場 } from "./place/Park.js";
+import { オークション会場 } from "./place/Auction.js";
+import { イベント広場 } from "./place/EventPark.js";
+import { 願いの泉 } from "./place/Spring.js";
+import { 復活の祭壇 } from "./place/Altar.js";
+import { ギルド協会 } from "./place/GuildAssociation.js";
+import { 命名の館 } from "./place/NamingMansion.js";
+import { 追放騎士団 } from "./place/ExileKnights.js";
+import { 何でも屋 } from "./place/Helper.js";
+import { 錬金場 } from "./place/Alchemy.js";
+import { 天界 } from "./place/Heaven.js";
+
 /**
  * @typedef {import("discord.js").CategoryChannel} CategoryChannel
  * @typedef {import("discord.js").GuildChannel} GuildChannel
  * @typedef {import("discord.js").GuildChannelManager} GuildChannelManager
  * @typedef {import("discord.js").Snowflake} Snowflake
  * @typedef {import("discord.js").TextChannel} TextChannel
+ * 
+ * @typedef {import("./place/Place.js").場所} 場所
  */
 
 /**
@@ -40,8 +69,44 @@ export const チャンネル名 = Object.freeze({
   チャレンジ記録: "世界記録",
   プレイヤーランキング: "ランキング",
   殿堂: "伝説のﾌﾟﾚｲﾔｰ",
-  職業ランキング: "職業ランキング",
+  職業ランキング: "職業ランキング"
 });
+
+/**
+ * @type {typeof import("./place/Place.js").場所[]}
+ */
+const 移動場所リスト = [
+  冒険に出る,
+  カジノ,
+  預かり所,
+  武器屋,
+  防具屋,
+  道具屋,
+  秘密の店,
+  ルイーダの酒場,
+  福引所,
+  モンスターじいさん,
+  フォトコン会場,
+  オラクル屋,
+  闇市場,
+  メダル王の城,
+  ダーマ神殿,
+  交流広場,
+  オークション会場,
+  イベント広場,
+  願いの泉,
+  復活の祭壇,
+  ギルド協会,
+  命名の館,
+  追放騎士団,
+  何でも屋,
+  錬金場,
+  天界
+]
+
+for (const 移動場所 of 移動場所リスト) {
+  Object.defineProperty(チャンネル名, 移動場所.name, 移動場所.name);
+}
 
 /**
  * @typedef {Map<チャンネル名, GuildChannel>} サーバーチャンネル チャンネル名とチャンネルの対応
@@ -75,10 +140,14 @@ export class サーバー {
     this.#プレイヤーランキング = 0;  // TODO
     this.#殿堂 = new 殿堂(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.殿堂)));
     this.#職業ランキング = new 職業ランキング(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
+    for (const 場所 of 移動場所リスト) {
+      const 場所名 = 場所.name;
+      Object.defineProperty(this, 場所名, new 場所(this,  /** @type {TextChannel} */(サーバーチャンネル.get(場所名))))
+    }
   }
 
   get guild() { return this.#guild; }
-  
+
   get プレイヤー() { return this.#プレイヤーマネージャー }
   get ギルド() { return this.#ギルドマネージャー; }
 

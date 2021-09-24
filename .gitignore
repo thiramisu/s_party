@@ -3,3 +3,4 @@ package-lock.json
 .env
 webpack.config.js
 node_modules/
+.vscode/

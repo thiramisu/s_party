@@ -1,23 +1,16 @@
 // @ts-check
 "use strict";
 
-import { ランダムな1要素 } from "../Util.js";
+import { キャラクター } from "../character/Character.js";
+import { ログ書き込み君 } from "../logger/Logger.js";
+import { ランダムな1要素, 空文字列 } from "../Util.js";
 
 /**
  * @typedef {import("../character/Character.js").メンバー} プレイヤー
  * 
  */
 
-export class 場所 {
-  constructor(背景画像, 訪問方法 = 場所._訪問方法.特殊, _NPC) {
-    const 名前 = this.constructor.name;
-    this._名前 = 名前;
-    this._背景画像 = 背景画像;
-    this._訪問方法 = 訪問方法;
-    this._チャット欄 = new チャット欄(名前);
-    this._NPC = _NPC;
-  }
-
+export class 場所 extends ログ書き込み君  {
   更新要求() {
     更新日時.更新();
     new 場所別キャラクター読み込み君(this);
@@ -54,10 +47,7 @@ export class 場所 {
    * @param {string} オーバーライド場所名
    */
   ヘッダー出力(プレイヤー, オーバーライド場所名) {
-    const 断片 = document.createDocumentFragment();
-    断片.appendChild(this._ヘッダー用出力(オーバーライド場所名));
-    断片.appendChild(プレイヤー.ヘッダー用出力());
-    return 断片;
+    return `${this._ヘッダー用出力(オーバーライド場所名)}${プレイヤー.ヘッダー用出力()}`;
   }
 
   固定NPC出力() {
@@ -86,10 +76,6 @@ export class 場所 {
     return 断片;
   }
 
-  チャット出力() {
-    return this._チャット欄.出力();
-  }
-
   チャットを書き込んでから読み込む(チャット) {
     if (チャット === undefined && this._NPCのチャット === undefined) {
       データベース操作.場所別ログを読み込む(this.ログ名, this.ログ読み込み後の処理.bind(this));
@@ -109,39 +95,19 @@ export class 場所 {
     }
   }
 
-  get 名前() { return this._名前; }
-  get 背景画像() { return this._背景画像; }
+  get 移動可能() { return true; }
+  get NPC() { return new キャラクター(this.サーバー, チャットのデフォルトのNPC名, "") }
+
+  get 名前() { return this.constructor.name; }
+  /**
+   * @interface
+   */
+  get 背景画像() { return "none.gif"; }
   get ログ名() { return this.名前; }
 
   static 初期化() {
     場所.#チャットのデフォルトNPC = new キャラクター(チャットのデフォルトのNPC名);
     場所.#一覧 = new Map([
-      new 冒険に出る(),
-      new カジノ(),
-      new 預かり所(),
-      new 武器屋(),
-      new 防具屋(),
-      new 道具屋(),
-      new 秘密の店(),
-      new ルイーダの酒場(),
-      new 福引所(),
-      new モンスターじいさん(),
-      new フォトコン会場(),
-      new オラクル屋(),
-      new 闇市場(),
-      new メダル王の城(),
-      new ダーマ神殿(),
-      new 交流広場(),
-      new オークション会場(),
-      new イベント広場(),
-      new 願いの泉(),
-      new 復活の祭壇(),
-      new ギルド協会(),
-      new 命名の館(),
-      new 追放騎士団(),
-      new 何でも屋(),
-      new 錬金場(),
-      new 天界(),
       new 町("ガイア国", "quest.gif", 10, new Set(["021", "022", "023", "024", "025", "026", "027", "028"]), 5000, 20),
       new 町("スライム町", "stage16.gif", 10, new Set(["013", "014", "015", "016", "017", "018", "019", "020"]), 3000, 15),
       new 町("キノコ町", "park.gif", 10, new Set(["005", "006", "007", "008", "009", "010", "011", "012"]), 1500, 10),
@@ -179,8 +145,8 @@ export class 場所 {
     this.NPCに話させる(ランダムな1要素(言葉リスト));
   }
 
-  _ヘッダー用出力(オーバーライド場所名, 半角スペースを入れる = true) {
-    return document.createTextNode(`【${オーバーライド場所名 ?? this.名前}】${半角スペースを入れる ? " " : 空文字列}`);
+  _ヘッダー用出力(場所名 = this.名前, 半角スペースを入れる = true) {
+    return `【${場所名}】${半角スペースを入れる ? " " : 空文字列}`;
   }
 
   _名前;
@@ -188,7 +154,6 @@ export class 場所 {
   _背景画像;
   _こうどうリストリスト = [];
   _キャラクターリスト = new Set();
-  _チャット欄;
   _NPCの発言;
 
   /**

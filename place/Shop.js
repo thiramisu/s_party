@@ -8,28 +8,32 @@ import { アイテム } from "../item/Item.js";
 import { 一般的な場所 } from "./General.js"
 import { 通貨 } from "../Currency.js"
 
+/**
+ * @typedef {import("../Server.js").サーバー} サーバー
+ */
+
+/**
+ * @typedef {import("discord.js").TextBasedChannels} チャンネル
+ */
+
 export class 店インターフェース extends 一般的な場所 {
   /**
-   * @param {string} 背景画像
-   * @param {any} 訪問方法
-   * @param {import("../character/Character.js").キャラクター} キャラクター
+   * @param {import("../Server.js").サーバー} サーバー
+   * @param {import("discord.js").TextBasedChannels} チャンネル
    * @param {typeof import("../item/Item.js").アイテム} 商品の種類
    * @param {number} 販売価格係数
    * @param {string} 陳列棚表示時の通知内容
    * @param {string} 金欠時の通知内容
    */
-  constructor(背景画像, 訪問方法, キャラクター,
+  constructor(サーバー, チャンネル, 
     商品の種類, 販売価格係数, 陳列棚表示時の通知内容, 金欠時の通知内容,
     購入のためのこうどう名 = "かう") {
-    super(背景画像, 訪問方法, キャラクター);
+    super(サーバー, チャンネル);
     this.#商品の種類 = 商品の種類;// TODO getPrototypeOf?
     this.#販売価格係数 = 販売価格係数;
     this.#陳列棚表示時の通知内容 = 陳列棚表示時の通知内容;
     this.#金欠時の通知内容 = 金欠時の通知内容;
     this.#購入のためのこうどう名 = 購入のためのこうどう名;
-    this._こうどうリストリスト.unshift(new こうどうマネージャー(null,
-      new こうどう(購入のためのこうどう名, this._かう.bind(this), undefined, this._かうクリック時),
-    ));
   }
 
   static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
@@ -130,7 +134,7 @@ export class 販売店 extends 店インターフェース {
       this._かうクリック時(アイテム.リスト(品揃え));
       return;
     }
-    this._かうメイン(商品, プレイヤー.所持金);
+    this._かうメイン(プレイヤー, 商品, プレイヤー.所持金);
   }
 
   _かうクリック時(販売アイテムリスト = アイテム.リスト(this._品揃えアイテム名リストを取得())) {
@@ -146,6 +150,8 @@ export class 販売店 extends 店インターフェース {
 
 export class 専門店 extends 販売店 {
   /**
+   * @param {サーバー} サーバー
+   * @param {チャンネル} チャンネル
    * @param {string} 背景画像
    * @param {any} 訪問方法
    * @param {import("../character/Character.js").キャラクター} キャラクター
@@ -155,7 +161,7 @@ export class 専門店 extends 販売店 {
    * @param {string} 金欠時の通知内容
    * @param {string} [購入のためのこうどう名]
    */
-  constructor(背景画像, 訪問方法, キャラクター, 商品の種類, 販売価格係数, 陳列棚表示時の通知内容, 金欠時の通知内容, 購入のためのこうどう名,
+  constructor(サーバー, チャンネル, 商品の種類, 販売価格係数, 陳列棚表示時の通知内容, 金欠時の通知内容, 購入のためのこうどう名,
     買取価格係数 = 0.5) {
     super(...arguments);
     this.#買取価格係数 = 買取価格係数;
@@ -194,15 +200,29 @@ export class 専門店 extends 販売店 {
 }
 
 export class 交換所 extends 店インターフェース {
-  constructor(背景画像, 訪問方法, キャラクター, 商品の種類, 販売価格係数, 陳列棚表示時の通知内容, 金欠時の通知内容, 購入のためのこうどう名,
+  /**
+   * @param {サーバー} サーバー
+   * @param {チャンネル} チャンネル
+   * @param {any} 背景画像
+   * @param {any} 訪問方法
+   * @param {any} キャラクター
+   * @param {any} 商品の種類
+   * @param {any} 販売価格係数
+   * @param {any} 陳列棚表示時の通知内容
+   * @param {any} 金欠時の通知内容
+   * @param {any} 購入のためのこうどう名
+   * @param {{ map: (arg0: (取引アイテム: any) => any[]) => Iterable<readonly [any, any]>; }} 販売取引アイテムリスト
+   */
+  constructor(サーバー, チャンネル, 商品の種類, 販売価格係数, 陳列棚表示時の通知内容, 金欠時の通知内容, 購入のためのこうどう名,
     販売取引アイテムリスト) {
     super(...arguments);
-    this.#販売取引アイテムリスト = new Map(販売取引アイテムリスト.map((取引アイテム) => [取引アイテム.名前, 取引アイテム]));
+    this.#販売取引アイテムリスト = new Map(販売取引アイテムリスト.map((/** @type {{ 名前: any; }} */ 取引アイテム) => [取引アイテム.名前, 取引アイテム]));
   }
 
   /**
    * @param {メンバー} プレイヤー
    * @param {string} 商品名
+   * @param {通貨} 通貨
    */
   _かう(プレイヤー, 商品名, 通貨) {
     const 商品 = this.#販売取引アイテムリスト.get(商品名);
@@ -210,7 +230,7 @@ export class 交換所 extends 店インターフェース {
       this._かうクリック時(this.#販売取引アイテムリスト);
       return;
     }
-    this._かうメイン(商品, 通貨);
+    this._かうメイン(プレイヤー, 商品, 通貨);
   }
 
   _かうクリック時(販売取引アイテムリスト = this.#販売取引アイテムリスト) {

@@ -2,16 +2,21 @@
 "use strict";
 
 import { 交換所 } from "./Shop.js"
+import { キャラクター } from "../character/Character.js";
+import { 道具 } from "../item/Item.js";
 
 export class 秘密の店 extends 交換所 {
-  constructor() {
-    super("item.gif", 場所._訪問方法.特殊, new キャラクター("@ﾋﾐﾂｼﾞ", "chr/019.gif"),
+  constructor(サーバー, チャンネル) {
+    super(サーバー, チャンネル,
       道具, 3, "どれを買うメェ～？", "お金が足らメェ～", "かう",
       ["ﾊﾟﾃﾞｷｱの根っこ", "魔法の鏡", "守りのﾙﾋﾞｰ", "銀のたてごと", "へんげの杖", "賢者の悟り", "精霊の守り", "伯爵の血"].map(アイテム名 => アイテム.一覧(アイテム名))
     );
     // TODO
     this._こうどうリストリスト[0].こうどう追加(new こうどう("ぱふぱふ", () => { this.NPCに話させる("未実装だメェ～。", あなた.toString()) }));
   }
+
+  get 背景画像() { return "item.gif"; }
+  get NPC() { return new キャラクター(this.サーバー, "@ﾋﾐﾂｼﾞ", "chr/019.gif"); }
 
   _はなす() {
     super._はなす(

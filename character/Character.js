@@ -28,9 +28,9 @@ export class キャラクター extends 基底 {
    * @param {string} アイコン 
    * @param {ColorResolvable} 色 
    * @param {number} 最終更新日時 
-   * @param {*} 場所別ID 
+   * @param {number} 場所別ID 
    */
-  constructor(サーバー, 名前, アイコン, 色 = 色名.NPC, 最終更新日時 = Infinity, 場所別ID) {
+  constructor(サーバー, 名前, アイコン, 色 = 色名.NPC, 最終更新日時 = Infinity, 場所別ID = 0) {
     super(サーバー);
     this._名前 = 名前;
     this._アイコン = アイコン;
@@ -437,6 +437,8 @@ export class メンバー extends ログインメンバー {
   get 前職() { return this._前職; }
   get 所持金() { return this._所持金; }
   get カジノコイン() { return this._カジノコイン; }
+  get 小さなメダル() { return this._小さなメダル; }
+  get 福引券() { return this._福引券; }
   get 実績() { return this._実績; }
   get ステータス() { return this._ステータス; }
   get レベル() { return this._レベル; }
@@ -457,7 +459,7 @@ export class メンバー extends ログインメンバー {
   }
 
   toJSON() {
-    
+
   }
 
   _ID;
@@ -505,10 +507,25 @@ export class メンバー extends ログインメンバー {
   _現職;
   _前職;
   _転職回数;
+  /**
+   * @type {通貨}
+   */
   _所持金;
+  /**
+   * @type {通貨}
+   */
   _カジノコイン;
+  /**
+   * @type {通貨}
+   */
   _小さなメダル;
+  /**
+   * @type {通貨}
+   */
   _福引券;
+  /**
+   * @type {通貨}
+   */
   _レアポイント;
   _疲労;
   _オーブフラグ;

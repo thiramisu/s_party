@@ -13,10 +13,6 @@ import { 場所 } from "./Place.js";
 const いどう先の表示で改行する項目数 = 25;
 
 export class 一般的な場所 extends 場所 {
-  constructor() {
-    super(...arguments);
-  }
-
   /**
    * @param {プレイヤー} プレイヤー
    * @param {string} 移動先場所名
@@ -106,6 +102,15 @@ export class 一般的な場所 extends 場所 {
     プレイヤー._小さなメダル.収支(100);
   }
 
+  /**
+   * @type {string}
+   */
+  get 背景画像() { return ""; }
+  /**
+   * @type {boolean}
+   */
+  get 移動可能() { return true; }
+  
   static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
 
   #移動(プレイヤー, 移動先場所名, 訪問方法 = 場所._訪問方法.いどう, こうどう名 = "いどう", 通知 = "どこに移動しますか？") {

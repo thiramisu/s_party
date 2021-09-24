@@ -1,6 +1,9 @@
 // @ts-check
 "use strict";
 
+import { 一般的な場所 } from "./General.js"
+import { 場所 } from "./Place.js";
+
 export class 福引所 extends 一般的な場所 {
   constructor() {
     super("lot.gif", 場所._訪問方法.いどう, new キャラクター("@ﾌｸｽｹ", "chr/006.gif"));

@@ -4,6 +4,7 @@
 import { 一般的な場所 } from "./General.js"
 import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
 import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
+import { キャラクター } from "../character/Character.js";
 import { ランダムな1要素 } from "../Util.js";
 
 /**
@@ -13,10 +14,6 @@ import { ランダムな1要素 } from "../Util.js";
 const カジノコイン1枚に対する必要ゴールド = 20;
 
 export class カジノ extends 一般的な場所 {
-  constructor() {
-    super("casino.gif", 場所._訪問方法.いどう, new キャラクター("@ﾊﾞﾆｰ", "chr/020.gif"));
-  }
-
   /**
    * @param {プレイヤー} プレイヤー
    */
@@ -34,6 +31,9 @@ export class カジノ extends 一般的な場所 {
     return 断片;
   }
 
+  get 背景画像() { return "casino.gif" ; }
+  get NPC() { return new キャラクター(this.サーバー, "@ﾊﾞﾆｰ", "chr/020.gif"); }
+  
   _はなす() {
     super._はなす(
       `コインは１枚${カジノコイン1枚に対する必要ゴールド}Gです☆`,
