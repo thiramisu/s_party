@@ -56,6 +56,8 @@ export class ログ書き込み君 extends 基底 {
     );
   }
 
+  get チャンネル() { return this.#チャンネル }
+
   /**
    * @param {Array<MessageEmbed>} embeds 
    * @param {string} ヘッダー ヘッダー情報不要なら`undefined`

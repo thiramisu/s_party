@@ -18,22 +18,13 @@ export class カジノ extends 一般的な場所 {
    * @param {プレイヤー} プレイヤー
    */
   ヘッダー出力(プレイヤー) {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      super._ヘッダー用出力(),
-      ` コイン`,
-      プレイヤー.カジノコイン.ヘッダー用出力(),
-      "枚 / ゴールド",
-      プレイヤー.所持金.ヘッダー用出力(),
-      "G"
-      // TODO 部屋一覧
-    );
-    return 断片;
+    // TODO 部屋一覧
+    return `${super._ヘッダー用出力()} コイン${プレイヤー.カジノコイン.ヘッダー用出力()}枚 / ゴールド${プレイヤー.所持金.ヘッダー用出力()}G`;
   }
 
-  get 背景画像() { return "casino.gif" ; }
+  get 背景画像() { return "casino.gif"; }
   get NPC() { return new キャラクター(this.サーバー, "@ﾊﾞﾆｰ", "chr/020.gif"); }
-  
+
   _はなす() {
     super._はなす(
       `コインは１枚${カジノコイン1枚に対する必要ゴールド}Gです☆`,

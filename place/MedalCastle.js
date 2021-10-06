@@ -1,8 +1,9 @@
 // @ts-check
 "use strict";
 
-import { キャラクター } from "../character/Character.js";
 import { 交換所 } from "./Shop.js"
+import { キャラクター } from "../character/Character.js";
+import { メダル王の賞品 } from "../item/MedalPrize.js";
 
 /**
  * @typedef {import("../character/Character.js").メンバー} プレイヤー
@@ -10,16 +11,11 @@ import { 交換所 } from "./Shop.js"
 
 export class メダル王の城 extends 交換所 {
   constructor(サーバー, チャンネル) {
-    super(メダル王の賞品, 1, "どれと交換するんじゃ？", undefined, "こうかん",);
+    super(サーバー, チャンネル, メダル王の賞品, 1, "どれと交換するんじゃ？", undefined, "こうかん",);
   }
 
   ヘッダー出力(プレイヤー) {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      super._ヘッダー用出力(),
-      強調テキスト("メダル ", プレイヤー._小さなメダル.所持, "枚")
-    );
-    return 断片;
+    return `${super._ヘッダー用出力()}メダル **${プレイヤー._小さなメダル.所持}**枚`;
   }
 
   get 背景画像() { return "medal.gif"; }

@@ -96,17 +96,17 @@ export class 場所 extends ログ書き込み君  {
   }
 
   get 移動可能() { return true; }
-  get NPC() { return new キャラクター(this.サーバー, チャットのデフォルトのNPC名, "") }
+  get NPC() { return new キャラクター(this.サーバー, チャットのデフォルトのNPC名, "none.gif") }
 
   get 名前() { return this.constructor.name; }
   /**
+   * @type {string}
    * @interface
    */
   get 背景画像() { return "none.gif"; }
   get ログ名() { return this.名前; }
 
   static 初期化() {
-    場所.#チャットのデフォルトNPC = new キャラクター(チャットのデフォルトのNPC名);
     場所.#一覧 = new Map([
       new 町("ガイア国", "quest.gif", 10, new Set(["021", "022", "023", "024", "025", "026", "027", "028"]), 5000, 20),
       new 町("スライム町", "stage16.gif", 10, new Set(["013", "014", "015", "016", "017", "018", "019", "020"]), 3000, 15),

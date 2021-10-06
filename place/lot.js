@@ -46,18 +46,8 @@ export class 福引所 extends 一般的な場所 {
     );
   }
 
-  ヘッダー出力() {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      this._ヘッダー用出力(),
-      `福引券`,
-      あなた.メンバー._福引券.ヘッダー用出力(),
-      `枚`
-    );
-    if (あなた.メンバー._道具) {
-      断片.appendChild(document.createTextNode(` E：${あなた.メンバー._道具}`));
-    }
-    return 断片;
+  ヘッダー出力(プレイヤー) {
+    return `${this._ヘッダー用出力()}福引券${プレイヤー.福引券.ヘッダー用出力()}枚${プレイヤー.道具.装備中 ? ` E：${プレイヤー.道具}` : ""}`;
   }
 
   _はなす() {

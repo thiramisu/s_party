@@ -20,19 +20,13 @@ export class 闇市場 extends 交換所 {
   }
 
   ヘッダー出力(プレイヤー) {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      super._ヘッダー用出力(),
-      強調テキスト("レアポイント ", プレイヤー._レアポイント.所持, "ポイント"),
-      プレイヤー.ヘッダー用装備出力()
-    );
-    return 断片;
+    return `${super._ヘッダー用出力()}レアポイント **${プレイヤー._レアポイント.所持}**ポイント${プレイヤー.ヘッダー用装備出力()}`;
   }
 
   get 背景画像() { return "none.gif"; }
   get NPC() { return new キャラクター(this.サーバー, "@闇商人", "chr/025.gif"); }
   get 移動可能() { return false; }
-  
+
   _はなす() {
     super._はなす(
       "よく来たな…。ここは闇市場だ…",

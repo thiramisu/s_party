@@ -37,7 +37,7 @@ const commands = [
           );
           const channel = interaction.channel;
           interaction.reply(MessageGetter.newEntry(新メンバー));
-          const thread = server.hoge; // TODO
+          const thread = server.交流広場.チャンネル; // TODO
           await thread.members.add(member);
           await thread.send("チュートリアル予定地");
           break;

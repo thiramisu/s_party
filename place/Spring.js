@@ -50,16 +50,16 @@ export class 願いの泉 extends 一般的な場所 {
     this.#ささげる(プレイヤー, SP, 簡易ステータス.素早さ(1));
   }
 
+  /**
+   * @param {プレイヤー} プレイヤー
+   */
   ヘッダー出力(プレイヤー) {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      super._ヘッダー用出力(),
-      `$jobs[$m{job}][1] $e2j{sp}<b>$m{sp}</b>|;
+    const 職業 = プレイヤー.現職;
+    return `${super._ヘッダー用出力()}${職業.名前} SP<b>${職業.SP}</b>|;
       for my $k (qw/lv mＨＰ mＭＰ at df ag/) {
         print qq| $e2j{$k}<b>$m{$k}</b>|;
       }
-      `);
-    return 断片;
+      `;
   }
 
   get 背景画像() { return "sp_change.gif"; }

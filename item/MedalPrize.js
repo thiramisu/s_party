@@ -3,7 +3,7 @@
 
 import { 取引アイテムインターフェース } from "./ItemInterface.js";
 
-class メダル王の賞品 extends 取引アイテムインターフェース {
+export class メダル王の賞品 extends 取引アイテムインターフェース {
   constructor(アイテム名, 価値) {
     super(アイテム名, 価値);
     this.#アイテム名 = アイテム名;

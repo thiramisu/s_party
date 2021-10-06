@@ -19,16 +19,7 @@ export class ルイーダの酒場 extends 一般的な場所 {
    * @param {プレイヤー} プレイヤー 
    */
   ヘッダー出力(プレイヤー) {
-    const
-      断片 = document.createDocumentFragment();
-    断片.append(
-      this._ヘッダー用出力(undefined, false),
-      `ゴールド：`,
-      プレイヤー.所持金.ヘッダー用出力(),
-      "G",
-      プレイヤー.ステータス.ヘッダー用2ステータス出力()
-    );
-    return 断片;
+    return `${this._ヘッダー用出力(undefined, false)}ゴールド：${プレイヤー.所持金.ヘッダー用出力()}G${プレイヤー.ステータス.ヘッダー用2ステータス出力()}`;
   }
   
   /**

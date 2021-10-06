@@ -12,6 +12,9 @@ import { 場所 } from "./Place.js";
 
 const いどう先の表示で改行する項目数 = 25;
 
+/**
+ * @implements {場所}
+ */
 export class 一般的な場所 extends 場所 {
   /**
    * @param {プレイヤー} プレイヤー
@@ -104,6 +107,7 @@ export class 一般的な場所 extends 場所 {
 
   /**
    * @type {string}
+   * @interface
    */
   get 背景画像() { return ""; }
   /**

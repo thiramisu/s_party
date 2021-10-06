@@ -15,10 +15,6 @@ import { 場所 } from "./Place.js";
 const 売値係数 = 0.5;
 
 export class 預かり所 extends 一般的な場所 {
-  constructor() {
-    super("depot.gif", 場所._訪問方法.いどう, new キャラクター("@ﾆｷｰﾀ", "chr/003.gif"));
-  }
-
   /**
    * @param {プレイヤー} プレイヤー
    * @param {string} アイテム名
@@ -56,6 +52,9 @@ export class 預かり所 extends 一般的な場所 {
 
   }
 
+  get 背景画像() { return "depot.gif"; }
+  get NPC() { return new キャラクター(this.サーバー, "@ﾆｷｰﾀ", "chr/003.gif"); }
+
   /**
    * 
    * @param {プレイヤー} プレイヤー 
@@ -78,13 +77,9 @@ export class 預かり所 extends 一般的な場所 {
    * @param {プレイヤー} プレイヤー 
    */
   ヘッダー出力(プレイヤー) {
-    const 断片 = document.createDocumentFragment();
-    断片.append(
-      this._ヘッダー用出力(),
-      強調テキスト(`倉庫：`, 999, "/", 99999, ` / `),
-      プレイヤー.ヘッダー用出力()
-    );
-    return 断片;
+    return `${this._ヘッダー用出力()
+      }倉庫：${999}/${99999
+      } / ${プレイヤー.ヘッダー用出力()}`;
   }
 
   static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
