@@ -105,8 +105,7 @@ const 移動場所リスト = [
 ]
 
 for (const 移動場所 of 移動場所リスト) {
-  console.log(移動場所.name);
-  Object.defineProperty(チャンネル名, 移動場所.name, 移動場所.name);
+  Object.defineProperty(チャンネル名, 移動場所.name, { value: 移動場所.name });
 }
 
 /**
@@ -143,7 +142,7 @@ export class サーバー {
     this.#職業ランキング = new 職業ランキング(this, /** @type {TextChannel} */(サーバーチャンネル.get(チャンネル名.職業ランキング)));
     for (const 場所 of 移動場所リスト) {
       const 場所名 = 場所.name;
-      Object.defineProperty(this, 場所名, new 場所(this,  /** @type {TextChannel} */(サーバーチャンネル.get(場所名))))
+      Object.defineProperty(this, 場所名, { value: new 場所(this,  /** @type {TextChannel} */(サーバーチャンネル.get(場所名))) })
     }
   }
 
