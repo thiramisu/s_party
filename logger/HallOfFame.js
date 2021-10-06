@@ -6,7 +6,7 @@ import {
   TextChannel
 } from "discord.js"
 import { ログ書き込み君 } from "./Logger.js"
-import { メンバー } from "../character/Character.js"
+import { メンバー } from "../character/Member.js"
 import { 記録スレッドマネージャー } from "../logger/RecordThreadManager.js"
 
 /**
