@@ -105,6 +105,7 @@ const 移動場所リスト = [
 ]
 
 for (const 移動場所 of 移動場所リスト) {
+  console.log(移動場所.name);
   Object.defineProperty(チャンネル名, 移動場所.name, 移動場所.name);
 }
 
