@@ -2,7 +2,7 @@
 "use strict";
 
 import { MessageEmbed } from "discord.js"
-import { メンバー } from "../character/Character.js"
+import { メンバー } from "../character/Member.js"
 import { 戦闘メンバー } from "../battle/BattleMember.js"
 import { ログ書き込み君 } from "./Logger.js"
 
