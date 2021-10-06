@@ -10,7 +10,7 @@ import { 酒場メニュー } from "../item/BarMenu.js"
 import { ランダムな1要素 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class ルイーダの酒場 extends 一般的な場所 {

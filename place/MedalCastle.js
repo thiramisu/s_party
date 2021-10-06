@@ -6,7 +6,7 @@ import { キャラクター } from "../character/Character.js";
 import { メダル王の賞品 } from "../item/MedalPrize.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class メダル王の城 extends 交換所 {

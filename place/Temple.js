@@ -8,7 +8,7 @@ import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { キャラクター } from "../character/Character.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class ダーマ神殿 extends 一般的な場所 {

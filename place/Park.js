@@ -8,7 +8,7 @@ import { キャラクター } from "../character/Character.js";
 import { ランダムな1要素 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 交流広場 extends 一般的な場所 {

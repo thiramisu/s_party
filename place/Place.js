@@ -6,7 +6,7 @@ import { ログ書き込み君 } from "../logger/Logger.js";
 import { ランダムな1要素, 空文字列 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  * 
  */
 

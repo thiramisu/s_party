@@ -5,7 +5,7 @@ import { 一般的な場所 } from "./General.js"
 import { キャラクター } from "../character/Character.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 天界 extends 一般的な場所 {

@@ -10,7 +10,7 @@ import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
 import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 武器屋 extends 専門店 {

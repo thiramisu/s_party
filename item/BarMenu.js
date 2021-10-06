@@ -5,7 +5,7 @@ import { 陳列可能インターフェース } from "./ItemInterface.js";
 import { 空文字列 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 酒場メニュー extends 陳列可能インターフェース {

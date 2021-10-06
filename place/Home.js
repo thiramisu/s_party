@@ -6,12 +6,12 @@ import { アイテム } from "../item/Item.js";
 import { ランダムな1要素, 全角を2とした文字列長 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 家 extends 一般的な場所 {
-  constructor(所有者名, 所有者ID) {
-    super("../space.gif", 場所._訪問方法.特殊);
+  constructor(サーバー, チャンネル, 所有者名, 所有者ID) {
+    super(サーバー, チャンネル, "../space.gif", 場所._訪問方法.特殊);
     this.#所有者名 = 所有者名;
     this.#所有者ID = 所有者ID;
     console.trace(this.#所有者ID);
@@ -109,7 +109,7 @@ export class 家 extends 一般的な場所 {
 
   /**
    * アイテムをつかう
-   * @param {import("../character/Character.js").メンバー} プレイヤー
+   * @param {プレイヤー} プレイヤー
    * @param {any} 対象
    */
   async つかう(プレイヤー, 対象) {

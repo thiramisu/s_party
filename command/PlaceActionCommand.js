@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} メンバー
+ * @typedef {import("../character/Member.js").メンバー} メンバー
  */
 
 export class PlaceActionCommand {
@@ -11,10 +11,11 @@ export class PlaceActionCommand {
    * @param {string} コマンド名 [a-z-]
    * @param {(メンバー: メンバー, ...引数: any[]) => void | boolean} 行動 名前が説明に使われる。効果が実行される。
    */
-  constructor(コマンド名, 行動) {
+  constructor(コマンド名, 行動, 隠しコマンドか = false) {
     this.#コマンド名 = コマンド名;
     this.#行動 = 行動;
     this.#引数 = [];
+    this.#隠しコマンドか = 隠しコマンドか;
   }
 
   /**
@@ -61,6 +62,8 @@ export class PlaceActionCommand {
     };
   }
 
+  get 隠しコマンドか() { return this.#隠しコマンドか }
+
   /**
    * 
    * @param {[string, string|number]} param0 
@@ -75,6 +78,7 @@ export class PlaceActionCommand {
 
   #コマンド名;
   #行動;
+  #隠しコマンドか;
   /**
    * @type {(import("discord.js").ApplicationCommandChoicesData
    * | import("discord.js").ApplicationCommandNonOptionsData)[]}

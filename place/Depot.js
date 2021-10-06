@@ -9,7 +9,7 @@ import { 一般的な場所 } from "./General.js"
 import { 場所 } from "./Place.js";
 
 /** 
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 const 売値係数 = 0.5;

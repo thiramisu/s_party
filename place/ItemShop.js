@@ -1,17 +1,28 @@
 // @ts-check
 "use strict";
 
+import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
+import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { 専門店 } from "./Shop.js"
+
+/**
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
+ */
 
 export class 道具屋 extends 専門店 {
   constructor() {
     super("item.gif", 場所._訪問方法.いどう, new キャラクター("@ｱｲﾃﾑｺ", "chr/004.gif"),
       道具, 2, "どれを買うニョ？", "ビンボーにゃの？働かにゃいの？");
-    this._こうどうリストリスト[0].こうどう追加(new こうどう(
-      "ひみつのみせ",
-      () => { if (あなた.メンバー.転職回数 < /* TODO 7 */ 0) { return; } あなた.場所移動(場所.一覧("秘密の店")); },
-      こうどう.状態固定.get(こうどう.状態.隠しコマンド)
-    ));
+  }
+
+  /**
+   * @param {プレイヤー} プレイヤー
+   */
+  ひみつのみせ(プレイヤー) {
+    if (プレイヤー.転職回数 < /* TODO 7 */ 0) {
+      return;
+    }
+    プレイヤー.場所移動(場所.一覧("秘密の店"));
   }
 
   _はなす() {
@@ -56,4 +67,19 @@ export class 道具屋 extends 専門店 {
   _倉庫送信時の会話内容を取得(アイテム) { return `${アイテム.名前}は${あなた}ニャンの預かり所の方に投げましたニャ！`; }
   _売却確認時の通知内容を取得(アイテム名, 売却価格) { return `${アイテム名}なら ${売却価格} Gで買うニャ！`; }
   _売却時の会話内容を取得(アイテム名, 売却価格) { return `${売却価格} Gで ${アイテム名} を買い取りまちた`; }
+
+  static get コマンド() { return this.#コマンド ?? this.#コマンドを登録(); }
+
+  static #コマンドを登録() {
+    this.#コマンド = new PlaceCommandGroup("item-shop", "道具屋");
+    this.#コマンド.追加(
+      new PlaceActionCommand("secret-shop", 道具屋.prototype.ひみつのみせ, true)
+    );
+    return this.#コマンド;
+  }
+
+  /**
+   * @type {PlaceCommandGroup}
+   */
+  static #コマンド;
 }

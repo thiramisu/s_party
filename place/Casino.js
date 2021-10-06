@@ -8,7 +8,7 @@ import { キャラクター } from "../character/Character.js";
 import { ランダムな1要素 } from "../Util.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 const カジノコイン1枚に対する必要ゴールド = 20;

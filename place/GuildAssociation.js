@@ -8,7 +8,7 @@ import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { 色名 } from "../config.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class ギルド協会 extends 一般的な場所 {

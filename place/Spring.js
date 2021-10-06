@@ -6,7 +6,7 @@ import { キャラクター } from "../character/Character.js";
 import { 簡易ステータス } from "../character/Status.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 願いの泉 extends 一般的な場所 {

@@ -5,7 +5,7 @@ import { キャラクター } from "../character/Character.js";
 import { 一般的な場所 } from "./General.js"
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 命名の館 extends 一般的な場所 {

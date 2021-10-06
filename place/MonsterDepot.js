@@ -7,7 +7,7 @@ import { PlaceActionCommand } from "../command/PlaceActionCommand.js";
 import { キャラクター } from "../character/Character.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class モンスターじいさん extends 一般的な場所 {

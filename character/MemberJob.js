@@ -1,6 +1,8 @@
 // @ts-check
 "use strict";
 
+import { 転職可能な職業 } from "./Job.js";
+
 export class メンバーの職業 {
   constructor(職業名, SP) {
     this.#職業 = 転職可能な職業.一覧(職業名);
@@ -46,13 +48,7 @@ export class ジョブマスターの職業 extends メンバーの職業 {
     const
       ジョブマスターの職業一覧 = new Map(ジョブマスターの職業リスト.map(ジョブマスターの職業.#一覧へ)),
       断片 = document.createDocumentFragment();
-    let 改行する = 0;
-    let tr;
     for (const _職業 of 転職可能な職業.全て()) {
-      if (改行する++ % ジョブマスターの1行の職業数 === 0) {
-        tr = document.createElement("tr");
-        断片.appendChild(tr);
-      }
       const ジョブマスター状況 = ジョブマスターの職業一覧.get(_職業.名前);
       tr.appendChild(_職業.図鑑用出力(ジョブマスター状況?._性別, ジョブマスター状況?._SP));
     }

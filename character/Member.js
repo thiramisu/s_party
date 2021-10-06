@@ -13,6 +13,7 @@ import { プレイヤー錬金レシピマネージャー } from "./PlayerAlchem
 import { 場所 } from "../place/Place.js";
 import { メンバーの職業 } from "./MemberJob.js";
 import { アイテム } from "../item/Item.js";
+import { 空文字列 } from "../Util.js";
 
 /**
  * @typedef {import("discord.js").ColorResolvable} ColorResolvable
@@ -310,16 +311,7 @@ export class メンバー extends ログインメンバー {
 
   ヘッダー用出力() {
     // TODO ステータスは武器防具込みのもの、素早さのみ max(0,素早さ)
-    const 断片 = 強調テキスト(
-      "ゴールド ", this.所持金.所持,
-      "G / "
-    );
-    断片.append(
-      this.ステータス.ヘッダー用3ステータス出力(),
-      " /",
-      this.装備.ヘッダー用出力()
-    );
-    return 断片;
+    return `ゴールド **${this.所持金.所持}G / ${this.ステータス.ヘッダー用3ステータス出力()} /${this.装備.ヘッダー用出力()}`;
   }
 
   疲労確認() {

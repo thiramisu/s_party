@@ -6,7 +6,7 @@ import { PlaceCommandGroup } from "../command/PlaceCommandGroup.js";
 import { 場所 } from "./Place.js";
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  * 
  */
 

@@ -7,7 +7,7 @@ import { 確率 } from "../Util.js";
 
 
 /**
- * @typedef {import("../character/Character.js").メンバー} プレイヤー
+ * @typedef {import("../character/Member.js").メンバー} プレイヤー
  */
 
 export class 願い事 {

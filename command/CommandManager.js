@@ -1,12 +1,12 @@
 // @ts-check
 "use strict";
 
-import { ApplicationCommand, Interaction, Message } from "discord.js"
+import { ApplicationCommand, Interaction, Message } from "discord.js";
 import { MessageGetter } from "../MessageGetter.js"
 import { 一般的な場所 } from "../place/General.js";
 import { 預かり所 } from "../place/Depot.js";
 import { 武器屋 } from "../place/WeaponShop.js";
-import { メンバー } from "../character/Character.js"
+//import {メンバー} from "../character/Member.js";
 
 /**
  * @typedef {import("discord.js").ThreadManager} ThreadManager
