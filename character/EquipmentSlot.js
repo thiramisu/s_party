@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 
-import { メンバー } from "./Character.js"
+import { メンバー } from "./Member.js"
 
 /**
  * @typedef {import("../item/Item.js").アイテム} 装備

@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 
-import { メンバー } from "./Character.js";
+import { メンバー } from "./Member.js";
 import { 転職可能な職業 } from "./Job.js";
 import { ステータス } from "./Status.js";
 import { 基底 } from "../Base.js";

@@ -10,14 +10,14 @@ import {
 import { 装備スロット } from "./EquipmentSlot.js";
 
 /**
- * @typedef {import("./Character.js").キャラクター} キャラクター
+ * @typedef {import("./Member.js").メンバー} キャラクター
  * @typedef {import("../item/Item.js").アイテム} アイテム 
  */
 
 export class 装備スロットマネージャー extends 基底 {
   /**
    * @param {import("../Server.js").サーバー} サーバー
-   * @param {import("../character/Character.js").メンバー} キャラクター
+   * @param {キャラクター} キャラクター
    */
   constructor(サーバー, キャラクター) {
     super(サーバー);

@@ -10,7 +10,7 @@ const 最大モンスター預かり体数 = 0;
 class 倉庫 extends 基底 {
   /**
    * @param {import("../Server.js").サーバー} サーバー
-   * @param {import("./Character.js").メンバー} プレイヤー
+   * @param {import("./Member.js").メンバー} プレイヤー
    */
   constructor(サーバー, プレイヤー) {
     super(サーバー);

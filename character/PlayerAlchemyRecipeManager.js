@@ -10,7 +10,7 @@ import { 基底 } from "../Base.js"
 export class プレイヤー錬金レシピマネージャー extends 基底 {
   /**
    * @param {import("../Server.js").サーバー} サーバー
-   * @param {import("./Character.js").メンバー} プレイヤー
+   * @param {import("./Member.js").メンバー} プレイヤー
    */
   constructor(サーバー, プレイヤー) {
     super(サーバー);
